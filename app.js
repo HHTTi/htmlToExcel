@@ -54,7 +54,7 @@ function start() {
 
     let html = new GetHtml(data, url);
 
-    infolog.info('start GetHtml')
+    infolog.info(`start GetHtml:smiles_${outputName}.xlsx`)
 
     html.init()
 }
