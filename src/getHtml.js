@@ -16,7 +16,8 @@ class GetHtml {
                 name: 'sheet1',
                 data: [
                     [
-                        'smiles',
+                        'Name',
+                        'SMILES',
                         'Property',
                         'Predicted values'
                     ],
@@ -26,7 +27,8 @@ class GetHtml {
                 name: 'sheet2',
                 data: [
                     [
-                        'smiles',
+                        'Name',
+                        'SMILES',
                         'Property',
                         'Probability'
                     ],
@@ -43,13 +45,13 @@ class GetHtml {
                 _this = this;
 
             for (let i = 0; i < smilesName.length; i++) {
+                infolog.info(`${i + 1}/${smilesName.length} 开始请求(${smilesName[i]})`);
                 await requestHtml.call(_this, smilesName[i], url)
                 if (i == smilesName.length - 1) {
                     await writeExcel.call(_this);
                     infolog.info('smiles init done');
                 }
             }
-
 
         }
     }
@@ -101,12 +103,14 @@ class GetHtml {
                 three = three.trim()
 
                 _this.predictedData[0].data.push([
+                    '占位符',
                     name,
                     one,
                     two
                 ])
 
                 _this.probabilityData[0].data.push([
+                    '占位符',
                     name,
                     one,
                     three

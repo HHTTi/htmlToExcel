@@ -14,7 +14,7 @@ const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
 
 const GetHtml = require('./src/getHtml');
-
+const ReadExcel = require('./src/readExcel');
 
 const name = ['O=C(c1ccccc1O)C=Cc1ccccc1']
 var list = smiles.split(/[\s\n]/)
@@ -43,15 +43,18 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
-app.listen(3000, () => {
-    console.log('app.listen:3000')
+app.listen(3001, () => {
+    console.log('app.listen:3001')
 });
 
 
-let html = new GetHtml(list, url);
-let r = html.init()
-console.log('html', html, url, list)
+// let html = new GetHtml(list, url);
+// let r = html.init()
+// console.log('html', html, url, list)
 
+let excel = new ReadExcel(path.join(__dirname, 'public/input/smiles.xlsx'))
+
+excel.init()
 
 app.post('/form', (req, res) => {
     let data = req.body;
