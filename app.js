@@ -72,7 +72,7 @@ app.post('/form', (req, res) => {
 
     try {
 
-        res.send({ 'code': 1, 'msg': result })
+        res.send({ 'code': 1, 'msg': 'ok' })
     } catch (e) {
         errlog.error('/form--catcherr==>>', e);
         res.send({ 'code': 0, 'msg': '未知错误' });
@@ -86,12 +86,16 @@ app.get('/split_excel', (req, res) => {
         res.send({ 'code': 0, 'msg': '参数错误' });
         return;
     };
-    const { openId, blog_id } = query;
+    const { pwd } = query;
+    if (pwd != 'daiyongqi') {
+        res.send({ 'code': 0, 'msg': '请求错误' });
+        return;
+    }
     try {
-        // let split = new SplitExcel(path.join(__dirname, 'public/input/smiles.xlsx'), 100)
+        let split = new SplitExcel(path.join(__dirname, 'public/input/smiles.xlsx'), 100)
+        split.init()
 
-        // split.init()
-        res.send({ 'code': 0, 'msg': result })
+        res.send({ 'code': 1, 'msg': 'ok' })
     } catch (e) {
         errlog.error('split_excel::', e);
         res.send({ 'code': 0, 'msg': '未知错误' });

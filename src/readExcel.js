@@ -11,29 +11,6 @@ const xlsx = require('node-xlsx');
 class ReadExcel {
     constructor(fileUrl) {
             this.fileUrl = fileUrl
-
-            this.predictedData = [{
-                name: 'sheet1',
-                data: [
-                    [
-                        'Name',
-                        'SMILES',
-                        'Property',
-                        'Predicted values'
-                    ],
-                ]
-            }]
-            this.probabilityData = [{
-                name: 'sheet2',
-                data: [
-                    [
-                        'Name',
-                        'SMILES',
-                        'Property',
-                        'Probability'
-                    ],
-                ]
-            }]
         }
         // 处理excel 生成数组
     init() {

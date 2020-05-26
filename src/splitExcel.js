@@ -29,7 +29,16 @@ class SplitExcel {
             var excelData = xlsx.parse(this.fileUrl)
 
             var data = excelData[0].data;
-            var newData = this.excel
+            var newData = [{
+                name: 'sheet1',
+                data: [
+                    [
+                        'Name',
+                        'SMILES',
+                        '序号'
+                    ],
+                ]
+            }];
             var num = 1;
 
             for (let i = 1; i < data.length; i++) {
@@ -40,7 +49,16 @@ class SplitExcel {
                     fs.writeFileSync(`public/output/smiles_${num}_${i}.xlsx`, buffer)
 
                     num = i;
-                    newData = this.excel;
+                    newData = [{
+                        name: 'sheet1',
+                        data: [
+                            [
+                                'Name',
+                                'SMILES',
+                                '序号'
+                            ],
+                        ]
+                    }];
 
                     infolog.info(`完成分割:smiles_${num}_${i}.xlsx 时间:${new Date().getTime()}`)
                 }
