@@ -1,4 +1,3 @@
-
 const path = require('path');
 const fe = require('fs-extra');
 const fs = require('fs');
@@ -15,30 +14,30 @@ const xlsx = require('node-xlsx');
 
 class GetHtml {
     constructor(smilesName, url) {
-        this.smilesName = smilesName
-        this.url = url
-        this.predictedData = [{
-            name: 'sheet1',
-            data: [
-                [
-                    'smiles',
-                    'Property',
-                    'Predicted values'
-                ],
-            ]
-        }]
-        this.probabilityData = [{
-            name: 'sheet2',
-            data: [
-                [
-                    'smiles',
-                    'Property',
-                    'Probability'
-                ],
-            ]
-        }]
-    }
-    // 处理name
+            this.smilesName = smilesName
+            this.url = url
+            this.predictedData = [{
+                name: 'sheet1',
+                data: [
+                    [
+                        'smiles',
+                        'Property',
+                        'Predicted values'
+                    ],
+                ]
+            }]
+            this.probabilityData = [{
+                name: 'sheet2',
+                data: [
+                    [
+                        'smiles',
+                        'Property',
+                        'Probability'
+                    ],
+                ]
+            }]
+        }
+        // 处理name
     async init() {
         if (Array.isArray(this.smilesName) && this.smilesName.length) {
             var smilesName = this.smilesName,
@@ -73,9 +72,9 @@ class GetHtml {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: name }),
-        }).then(async (res) => {
-            infolog.info('smiles 请求:', res);
-            await processData.call(_this, res.data)
+        }).then(async(res) => {
+            infolog.info('smiles 请求:', url);
+            await processData.call(_this, res.data, name)
         }).catch((e) => {
             errlog.error('smiles 请求:', e);
         });
@@ -83,7 +82,7 @@ class GetHtml {
     }
 
     // 处理html
-    async processData(html) {
+    async processData(html, name) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
             return false;
@@ -93,9 +92,9 @@ class GetHtml {
 
         var $ = cheerio.load(html);
 
-        $(".table-bordered").each(function (index, item) {
-            infolog.info('$(".table-bordered").each', index, item);
-            $(this).find('tbody tr').each(function (idx, itm) {
+        $(".table-bordered").each(function(index, item) {
+
+            $(this).find('tbody tr').each(function(idx, itm) {
                 let one = $(this).children().first().text(),
                     two = $(this).children().eq(1).text(),
                     three = $(this).children().eq(2).text();
@@ -105,15 +104,15 @@ class GetHtml {
                 two = two.trim()
                 three = three.replace(/[\r\n]/g, "")
                 three = three.trim()
-                
+
                 _this.predictedData[0].data.push([
-                    smiles,
+                    name,
                     one,
                     two
                 ])
 
                 _this.probabilityData[0].data.push([
-                    smiles,
+                    name,
                     one,
                     three
                 ])
@@ -135,7 +134,7 @@ class GetHtml {
 
         var predictedDataBuffer = xlsx.build(this.predictedData);
         var probabilityDataBuffer = xlsx.build(this.probabilityData);
-        fs.writeFile('public/excel/Predicted_values.xlsx', predictedDataBuffer, function (err) {
+        fs.writeFile('public/excel/Predicted_values.xlsx', predictedDataBuffer, function(err) {
             if (err) {
                 errlog.error("Write Predicted_values.xlsx failed: " + err);
                 return;
@@ -143,7 +142,7 @@ class GetHtml {
 
             infolog.info("Write Predicted_values.xlsx completed.");
         });
-        fs.writeFile('public/excel/Probability.xlsx', probabilityDataBuffer, function (err) {
+        fs.writeFile('public/excel/Probability.xlsx', probabilityDataBuffer, function(err) {
             if (err) {
                 errlog.error("Write Probability.xlsx failed: " + err);
                 return;
@@ -151,7 +150,7 @@ class GetHtml {
 
             infolog.info("Write Probability.xlsx completed.");
         });
-        infolog.info(this.predictedData[0].data);
+
     }
 
 }
