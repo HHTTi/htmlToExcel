@@ -47,14 +47,19 @@ app.listen(3001, () => {
     console.log('app.listen:3001')
 });
 
+let excel = new ReadExcel(path.join(__dirname, 'public/input/smiles1.xlsx'));
 
-// let html = new GetHtml(list, url);
-// let r = html.init()
-// console.log('html', html, url, list)
+let data = excel.init()
 
-let excel = new ReadExcel(path.join(__dirname, 'public/input/smiles.xlsx'))
+infolog.info('ReadExcel data', data)
 
-excel.init()
+let html = new GetHtml(data, url);
+let r = html.init()
+
+infolog.info('start GetHtml')
+
+
+
 
 app.post('/form', (req, res) => {
     let data = req.body;

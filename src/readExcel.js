@@ -40,11 +40,17 @@ class ReadExcel {
         try {
             var excelData = xlsx.parse(this.fileUrl)
 
-            infolog.info('excelData', excelData[0])
+            var data = excelData[0].data;
+            var newData = []
 
-            return excelData[0].data
+            for (let i = 1; i < data.length; i++) {
+                newData.push({ name: data[i][0], smiles: data[i][1] })
+            }
+
+            infolog.info('newData done');
+            return newData;
         } catch (error) {
-            errlog.error(error)
+            errlog.error('处理excel 生成数组', error)
         }
     }
 

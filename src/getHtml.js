@@ -57,9 +57,10 @@ class GetHtml {
     }
 
     // 请求html
-    async requestHtml(name, url) {
-        if (!name && !url) {
-            errlog.error('smilesName或url不存在');
+    async requestHtml(itemName, url) {
+        var { name, smiles } = itemName;
+        if (!smiles && !url) {
+            errlog.error('smilesName或url不存在', itemName);
             return;
         };
         var processData = this.processData,
@@ -69,10 +70,10 @@ class GetHtml {
             url: url,
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify({ smiles: name }),
+            data: qs.stringify({ smiles: smiles }),
         }).then(async(res) => {
-            infolog.info('smiles 请求完成:' + url + 'smilesName' + name);
-            await processData.call(_this, res.data, name)
+            infolog.info('smiles 请求完成:' + url + 'smilesName' + name + smiles);
+            await processData.call(_this, res.data, name, smiles)
         }).catch((e) => {
             errlog.error('smiles 请求:', e);
         });
@@ -80,7 +81,7 @@ class GetHtml {
     }
 
     // 处理html
-    async processData(html, name) {
+    async processData(html, name, smiles) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
             return false;
@@ -103,15 +104,15 @@ class GetHtml {
                 three = three.trim()
 
                 _this.predictedData[0].data.push([
-                    '占位符',
                     name,
+                    smiles,
                     one,
                     two
                 ])
 
                 _this.probabilityData[0].data.push([
-                    '占位符',
                     name,
+                    smiles,
                     one,
                     three
                 ])
