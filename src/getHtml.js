@@ -9,9 +9,10 @@ const xlsx = require('node-xlsx');
 
 
 class GetHtml {
-    constructor(smilesName, url) {
+    constructor(smilesName, url, outputName) {
             this.smilesName = smilesName
             this.url = url
+            this.outputName = outputName
             this.predictedData = [{
                 name: 'sheet1',
                 data: [
@@ -42,10 +43,11 @@ class GetHtml {
                 url = this.url,
                 requestHtml = this.requestHtml,
                 writeExcel = this.writeExcel,
+                outputName = this.outputName,
                 _this = this;
 
             for (let i = 0; i < smilesName.length; i++) {
-                infolog.info(`${i + 1}/${smilesName.length} 开始请求(${smilesName[i]})`);
+                infolog.info(`${i + 1}/${smilesName.length} 开始请求(${smilesName[i].name})`);
                 await requestHtml.call(_this, smilesName[i], url)
                 if (i == smilesName.length - 1) {
                     await writeExcel.call(_this);
@@ -72,7 +74,7 @@ class GetHtml {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: smiles }),
         }).then(async(res) => {
-            infolog.info('smiles 请求完成:' + url + 'smilesName' + name + smiles);
+            infolog.info('smiles 请求完成:' + url + 'smilesName' + smiles);
             await processData.call(_this, res.data, name, smiles)
         }).catch((e) => {
             errlog.error('smiles 请求:', e);
@@ -131,24 +133,24 @@ class GetHtml {
         //     errlog.error('Fn-writeExcel-predictedData/probabilityData 数据不存在');
         //     return;
         // }
-
+        var outputName = this.outputName;
         var predictedDataBuffer = xlsx.build(this.predictedData);
         var probabilityDataBuffer = xlsx.build(this.probabilityData);
-        fs.writeFile('public/excel/Predicted_values.xlsx', predictedDataBuffer, function(err) {
+        fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function(err) {
             if (err) {
-                errlog.error("Write Predicted_values.xlsx failed: " + err);
+                errlog.error("Write Predicted_values_" + outputName + ".xlsx failed: " + err);
                 return;
             }
 
-            infolog.info("Write Predicted_values.xlsx completed.");
+            infolog.info("Write Predicted_values_" + outputName + ".xlsx completed.");
         });
-        fs.writeFile('public/excel/Probability.xlsx', probabilityDataBuffer, function(err) {
+        fs.writeFile(`public/excel/Probability_${outputName}.xlsx`, probabilityDataBuffer, function(err) {
             if (err) {
-                errlog.error("Write Probability.xlsx failed: " + err);
+                errlog.error("Write Probability_" + outputName + ".xlsx failed: " + err);
                 return;
             }
 
-            infolog.info("Write Probability.xlsx completed.");
+            infolog.info("Write Probability_" + outputName + ".xlsx completed.");
         });
 
     }

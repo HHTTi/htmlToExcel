@@ -15,10 +15,7 @@ const infolog = log4js.getLogger('info')
 
 const GetHtml = require('./src/getHtml');
 const ReadExcel = require('./src/readExcel');
-
-const name = ['O=C(c1ccccc1O)C=Cc1ccccc1']
-var list = smiles.split(/[\s\n]/)
-
+const SplitExcel = require('./src/splitExcel');
 
 /*引入路由模块*/
 // var index = require("./routes/index");
@@ -47,19 +44,22 @@ app.listen(3001, () => {
     console.log('app.listen:3001')
 });
 
-let excel = new ReadExcel(path.join(__dirname, 'public/input/smiles1.xlsx'));
+function start() {
+    let outputName = "100_200"
+    let excel = new ReadExcel(path.join(__dirname, `public/output/smiles_${outputName}.xlsx`));
 
-let data = excel.init()
+    let data = excel.init()
 
-infolog.info('ReadExcel data', data)
+    infolog.info('ReadExcel data', data, outputName)
 
-let html = new GetHtml(data, url);
-let r = html.init()
+    let html = new GetHtml(data, url);
 
-infolog.info('start GetHtml')
+    infolog.info('start GetHtml')
 
+    html.init()
+}
 
-
+start()
 
 app.post('/form', (req, res) => {
     let data = req.body;
@@ -75,6 +75,25 @@ app.post('/form', (req, res) => {
         res.send({ 'code': 1, 'msg': result })
     } catch (e) {
         errlog.error('/form--catcherr==>>', e);
+        res.send({ 'code': 0, 'msg': '未知错误' });
+    }
+})
+
+app.get('/split_excel', (req, res) => {
+    var query = req.query;
+    infolog.info('split_excel:', query);
+    if (!query) {
+        res.send({ 'code': 0, 'msg': '参数错误' });
+        return;
+    };
+    const { openId, blog_id } = query;
+    try {
+        // let split = new SplitExcel(path.join(__dirname, 'public/input/smiles.xlsx'), 100)
+
+        // split.init()
+        res.send({ 'code': 0, 'msg': result })
+    } catch (e) {
+        errlog.error('split_excel::', e);
         res.send({ 'code': 0, 'msg': '未知错误' });
     }
 })
