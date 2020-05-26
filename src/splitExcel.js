@@ -37,8 +37,8 @@ class SplitExcel {
             }];
             var num = 1;
 
-            if (!path.existsSync('public/output')) {
-                fs.mkdirSync('public/output', 0777);
+            if (!fs.existsSync('public/output')) {
+                fs.mkdirSync('public/output');
             }
 
             for (let i = 1; i < data.length; i++) {

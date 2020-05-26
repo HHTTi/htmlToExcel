@@ -47,7 +47,7 @@ class GetHtml {
                 _this = this;
 
             for (let i = 0; i < smilesName.length; i++) {
-                infolog.info(`${i + 1}/${smilesName.length} 开始请求(${smilesName[i].name})`);
+                infolog.info(`${i + 1}/${smilesName.length} (dir:${outputName}) 开始请求(${smilesName[i].name})`);
                 await requestHtml.call(_this, smilesName[i], url)
                 if (i == smilesName.length - 1) {
                     await writeExcel.call(_this);
@@ -74,7 +74,7 @@ class GetHtml {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: smiles }),
         }).then(async(res) => {
-            infolog.info('smiles 请求完成:' + url + 'smilesName' + smiles);
+            infolog.info('smiles 请求完成:' + 'smilesName' + smiles);
             await processData.call(_this, res.data, name, smiles)
         }).catch((e) => {
             errlog.error('smiles 请求:', e);
@@ -137,8 +137,8 @@ class GetHtml {
         var predictedDataBuffer = xlsx.build(this.predictedData);
         var probabilityDataBuffer = xlsx.build(this.probabilityData);
 
-        if (!path.existsSync('public/excel')) {
-            fs.mkdirSync('public/excel', 0777);
+        if (!fs.existsSync('public/excel')) {
+            fs.mkdirSync('public/excel');
         }
 
         fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function(err) {

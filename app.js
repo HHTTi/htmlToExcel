@@ -52,7 +52,7 @@ function start() {
 
     infolog.info('ReadExcel data', data, outputName)
 
-    let html = new GetHtml(data, url);
+    let html = new GetHtml(data, url, outputName);
 
     infolog.info(`start GetHtml:smiles_${outputName}.xlsx`)
 
