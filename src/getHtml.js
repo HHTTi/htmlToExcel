@@ -136,6 +136,11 @@ class GetHtml {
         var outputName = this.outputName;
         var predictedDataBuffer = xlsx.build(this.predictedData);
         var probabilityDataBuffer = xlsx.build(this.probabilityData);
+
+        if (!path.existsSync('public/excel')) {
+            fs.mkdirSync('public/excel', 0777);
+        }
+
         fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function(err) {
             if (err) {
                 errlog.error("Write Predicted_values_" + outputName + ".xlsx failed: " + err);

@@ -1,12 +1,8 @@
 const fs = require('fs');
-const axios = require('axios');
 const log4js = require('./middleware/logger')
 const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
-const cheerio = require('cheerio')
-const qs = require('qs');
 const xlsx = require('node-xlsx');
-
 
 class SplitExcel {
     constructor(fileUrl, excelLength) {
@@ -40,6 +36,10 @@ class SplitExcel {
                 ]
             }];
             var num = 1;
+
+            if (!path.existsSync('public/output')) {
+                fs.mkdirSync('public/output', 0777);
+            }
 
             for (let i = 1; i < data.length; i++) {
                 newData[0].data.push(data[i])
