@@ -1,13 +1,9 @@
-const path = require('path');
-const fe = require('fs-extra');
 const fs = require('fs');
 const axios = require('axios');
 const log4js = require('./middleware/logger')
 const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
-const FormData = require('form-data');
 const cheerio = require('cheerio')
-const request = require('request');
 const qs = require('qs');
 const xlsx = require('node-xlsx');
 
@@ -73,7 +69,7 @@ class GetHtml {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: name }),
         }).then(async(res) => {
-            infolog.info('smiles 请求:', url);
+            infolog.info('smiles 请求完成:' + url + 'smilesName' + name);
             await processData.call(_this, res.data, name)
         }).catch((e) => {
             errlog.error('smiles 请求:', e);
@@ -87,7 +83,6 @@ class GetHtml {
             errlog.error('Fn-processData-html不存在');
             return false;
         };
-        var smiles = this.smilesName;
         var _this = this;
 
         var $ = cheerio.load(html);

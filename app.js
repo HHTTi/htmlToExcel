@@ -16,9 +16,7 @@ const infolog = log4js.getLogger('info')
 const GetHtml = require('./src/getHtml');
 
 
-// const url = 'http://admet.scbdd.com/calcpre/index_sys_result/'
 const name = ['O=C(c1ccccc1O)C=Cc1ccccc1']
-// const name = ['O=C(c1ccccc1O)C=Cc1ccccc1','COc1cc(O)cc(c1C(=O)C=Cc1ccccc1)O','O=C(c1ccccc1O)C=Cc1ccccc1','Oc1ccc(cc1)c1[o+]c2cc(O)cc(c2cc1O)O']
 var list = smiles.split(/[\s\n]/)
 
 
@@ -49,17 +47,6 @@ app.listen(3000, () => {
     console.log('app.listen:3000')
 });
 
-
-// 更新文章列表
-app.get('/update_wx_subscription', (req, res) => {
-
-
-})
-// 更新提醒列表
-app.get('/update_mp_subscribe_list', (req, res) => {
-
-
-})
 
 let html = new GetHtml(list, url);
 let r = html.init()
