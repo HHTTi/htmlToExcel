@@ -1,25 +1,25 @@
 const fs = require('fs');
-const log4js = require('./middleware/logger')
+const log4js = require('./src/middleware/logger')
 const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
 const xlsx = require('node-xlsx');
 
 class SplitExcel {
     constructor(fileUrl, excelLength) {
-            this.fileUrl = fileUrl
-            this.excelLength = excelLength
-            this.excel = [{
-                name: 'sheet1',
-                data: [
-                    [
-                        'Name',
-                        'SMILES',
-                        '序号'
-                    ],
-                ]
-            }]
-        }
-        //分割excel为小excel
+        this.fileUrl = fileUrl
+        this.excelLength = excelLength
+        this.excel = [{
+            name: 'sheet1',
+            data: [
+                [
+                    'Name',
+                    'SMILES',
+                    '序号'
+                ],
+            ]
+        }]
+    }
+    //分割excel为小excel
     init() {
         try {
             var excelData = xlsx.parse(this.fileUrl)

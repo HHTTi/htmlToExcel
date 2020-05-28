@@ -1,6 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
-const log4js = require('./middleware/logger')
+const log4js = require('./src/middleware/logger')
 const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
 const cheerio = require('cheerio')
@@ -76,7 +76,7 @@ class GetHtml {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: smiles }),
-        }).then(async(res) => {
+        }).then(async (res) => {
             infolog.info('请求完成,' + 'smilesName:' + smiles);
             await processData.call(_this, res.data, name, smiles)
         }).catch((e) => {
@@ -118,9 +118,9 @@ class GetHtml {
 
         var $ = cheerio.load(html);
 
-        $(".table-bordered").each(function(index, item) {
+        $(".table-bordered").each(function (index, item) {
 
-            $(this).find('tbody tr').each(function(idx, itm) {
+            $(this).find('tbody tr').each(function (idx, itm) {
                 let one = $(this).children().first().text(),
                     two = $(this).children().eq(1).text(),
                     three = $(this).children().eq(2).text();
@@ -167,7 +167,7 @@ class GetHtml {
             fs.mkdirSync('public/excel');
         }
 
-        fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function(err) {
+        fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function (err) {
             if (err) {
                 errlog.error("Write Predicted_values_" + outputName + ".xlsx failed: " + err);
                 return;
@@ -175,7 +175,7 @@ class GetHtml {
 
             infolog.info("Write Predicted_values_" + outputName + ".xlsx completed.");
         });
-        fs.writeFile(`public/excel/Probability_${outputName}.xlsx`, probabilityDataBuffer, function(err) {
+        fs.writeFile(`public/excel/Probability_${outputName}.xlsx`, probabilityDataBuffer, function (err) {
             if (err) {
                 errlog.error("Write Probability_" + outputName + ".xlsx failed: " + err);
                 return;

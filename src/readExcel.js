@@ -1,6 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
-const log4js = require('./middleware/logger')
+const log4js = require('./src/middleware/logger')
 const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
 const cheerio = require('cheerio')
@@ -10,9 +10,10 @@ const xlsx = require('node-xlsx');
 
 class ReadExcel {
     constructor(fileUrl) {
-            this.fileUrl = fileUrl
-        }
-        // 处理excel 生成数组
+        this.fileUrl = fileUrl
+    }
+
+    // 处理excel 生成数组
     init() {
         try {
             var excelData = xlsx.parse(this.fileUrl)
