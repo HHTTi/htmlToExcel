@@ -1,6 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
-const log4js = require('./src/middleware/logger')
+const log4js = require('./middleware/logger')
 const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
 const cheerio = require('cheerio')

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
-const log4js = require('./src/middleware/logger')
+const log4js = require('./middleware/logger')
 const errlog = log4js.getLogger('err')
 const infolog = log4js.getLogger('info')
 const cheerio = require('cheerio')
@@ -47,7 +47,7 @@ class GetHtml {
                 outputName = this.outputName,
                 _this = this;
 
-            for (let i = 0; i < smilesName.length; i++) {
+            for (let i = 0; i < 1; i++) {
                 infolog.info(`${i + 1}/${smilesName.length} (dir:${outputName}) 开始请求(${smilesName[i].name})`);
                 await requestHtml.call(_this, smilesName[i], url)
                 if (i == smilesName.length - 1) {
@@ -77,7 +77,7 @@ class GetHtml {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: smiles }),
         }).then(async (res) => {
-            infolog.info('请求完成,' + 'smilesName:' + smiles);
+            infolog.info('请求完成,' + 'smilesName:' + smiles+'==',res.data);
             await processData.call(_this, res.data, name, smiles)
         }).catch((e) => {
             // errlog.error('smiles 请求:', e);

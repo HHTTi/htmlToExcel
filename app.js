@@ -13,6 +13,7 @@ const GetHtml = require('./src/getHtml');
 const ReadExcel = require('./src/readExcel');
 const SplitExcel = require('./src/splitExcel')
 const MergeExcel = require('./src/mergeExcel')
+const UpdateExcel = require('./src/updateExcel')
 
 function start(outputName) {
 
@@ -30,7 +31,7 @@ function start(outputName) {
 }
 
 function start1() {
-    let outputName = "300_600"
+    let outputName = "1_300"
     let excel = new ReadExcel(path.join(__dirname, `public/output/smiles_${outputName}.xlsx`));
 
     let data = excel.init()
@@ -44,6 +45,7 @@ function start1() {
     html.init()
 }
 
+start1()
 
 // start()
 // '1_300', '300_600', '600_900', '900_1200', '1200_1500',
@@ -96,4 +98,11 @@ function merge() {
     merge.init()
 }
 
-merge()
+// merge()
+
+function updateExcel() {
+    let update = new UpdateExcel('public/input/smiles_all.xlsx', 'public/output/smiles_all_update.xlsx')
+    update.init()
+}
+
+// updateExcel()
