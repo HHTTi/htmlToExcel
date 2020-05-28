@@ -1,11 +1,7 @@
-const express = require('express')
 const cors = require("cors")
-const qs = require('querystring')
 const path = require('path');
-const session = require('express-session')
-const bodyParser = require('body-parser');
 
-const { url, smiles } = require('./config')
+const { url } = require('./config')
 
 const log4js = require('./src/middleware/logger')
 
@@ -15,37 +11,11 @@ const infolog = log4js.getLogger('info')
 
 const GetHtml = require('./src/getHtml');
 const ReadExcel = require('./src/readExcel');
-const SplitExcel = require('./src/splitExcel');
+const SplitExcel = require('./src/splitExcel')
+const MergeExcel = require('./src/mergeExcel')
 
-/*引入路由模块*/
-// var index = require("./routes/index");
+function start(outputName) {
 
-const app = express();
-
-log4js.useLogger(app)
-
-app.use(express.static(path.resolve(__dirname, '../client/public')));
-// app.use(express.static(path.resolve(__dirname, './uploadFiles/wework')));
-
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-app.use(session({
-    secret: 'ddddddd',
-    resave: false,
-    saveUninitialized: true
-}));
-app.listen(3001, () => {
-    console.log('app.listen:3001')
-});
-
-function start() {
-    let outputName = "100_200"
     let excel = new ReadExcel(path.join(__dirname, `public/output/smiles_${outputName}.xlsx`));
 
     let data = excel.init()
@@ -59,45 +29,71 @@ function start() {
     html.init()
 }
 
-start()
+function start1() {
+    let outputName = "300_600"
+    let excel = new ReadExcel(path.join(__dirname, `public/output/smiles_${outputName}.xlsx`));
 
-app.post('/form', (req, res) => {
-    let data = req.body;
-    const { pwd, smiles } = data
-    infolog.info('form 表单提交:', data);
-    if (!pwd || pwd != '1') {
-        res.send({ 'code': 0, 'msg': '参数错误' });
-        return;
-    };
+    let data = excel.init()
 
-    try {
+    infolog.info('ReadExcel data', data, outputName)
 
-        res.send({ 'code': 1, 'msg': 'ok' })
-    } catch (e) {
-        errlog.error('/form--catcherr==>>', e);
-        res.send({ 'code': 0, 'msg': '未知错误' });
-    }
-})
+    let html = new GetHtml(data, url, outputName);
 
-app.get('/split_excel', (req, res) => {
-    var query = req.query;
-    infolog.info('split_excel:', query);
-    if (!query) {
-        res.send({ 'code': 0, 'msg': '参数错误' });
-        return;
-    };
-    const { pwd } = query;
-    if (pwd != 'daiyongqi') {
-        res.send({ 'code': 0, 'msg': '请求错误' });
-        return;
-    }
-    try {
-        let split = new SplitExcel(path.join(__dirname, 'public/input/smiles.xlsx'), 100)
-        split.init()
+    infolog.info(`start GetHtml:smiles_${outputName}.xlsx`)
 
-        res.send({ 'code': 1, 'msg': 'ok' })
-    } catch (e) {
-        errlog.error('split_excel::', e);
-        res.send({ 'code': 0, 'msg': '未知错误' });
-    }
-})
+    html.init()
+}
+
+
+// start()
+// '1_300', '300_600', '600_900', '900_1200', '1200_1500',
+// let arr = ['1500_1800', '1800_2100', '2100_2400', '2400_2700', '2700_2815']
+// let time = 3000;
+// arr.forEach((item) => {
+//     console.log(item)
+//     setTimeout(() => { start(item) }, time);
+//     time += 3000
+// })
+
+// start4()
+// setTimeout(() => { start5() }, 15000)
+// setTimeout(() => { start6() }, 3000)
+// setTimeout(() => { start7() }, 6000)
+// setTimeout(() => { start8() }, 9000)
+// setTimeout(() => { start9() }, 12000)
+
+
+function split() {
+    let split = new SplitExcel(path.join(__dirname, 'public/input/smiles.xlsx'), 300)
+    split.init()
+}
+// split()
+
+function merge() {
+
+    // '1_300', '300_600', '600_900', '900_1200', '1200_1500',
+    let arr = [
+        '1_100',
+        '100_200',
+        '200_300',
+        '300_400',
+        '400_500',
+        '500_600',
+        '600_700',
+        '700_800',
+        '800_900',
+        '900_1000',
+        '1000_1100',
+        '1100_1200',
+        '1200_1500',
+        '1500_1800',
+        '1800_2100',
+        '2100_2400',
+        '2400_2700',
+        '2700_2815'
+    ]
+    let merge = new MergeExcel(arr)
+    merge.init()
+}
+
+merge()
