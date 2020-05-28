@@ -109,6 +109,8 @@ class GetHtml {
     }
 
     // 处理html
+    //  数据处理 更新格式 
+
     async processData(html, name, smiles) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
@@ -131,6 +133,8 @@ class GetHtml {
                 three = three.replace(/[\r\n]/g, "")
                 three = three.trim()
 
+                
+
                 _this.predictedData[0].data.push([
                     name,
                     smiles,
@@ -144,6 +148,7 @@ class GetHtml {
                     one,
                     three
                 ])
+
 
             })
 

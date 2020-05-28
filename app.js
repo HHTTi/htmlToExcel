@@ -45,7 +45,7 @@ function start1() {
     html.init()
 }
 
-start1()
+// start1()
 
 // start()
 // '1_300', '300_600', '600_900', '900_1200', '1200_1500',
@@ -101,7 +101,11 @@ function merge() {
 // merge()
 
 function updateExcel() {
-    let update = new UpdateExcel('public/input/smiles_all.xlsx', 'public/output/smiles_all_update.xlsx')
+    let update = new UpdateExcel(
+        'public/input/smiles_mw.xlsx',
+        'public/input/smiles_all.xlsx',
+        'public/output/smiles_all_update.xlsx'
+    )
     update.init()
 }
 

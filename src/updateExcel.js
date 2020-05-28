@@ -7,7 +7,8 @@ const xlsx = require('node-xlsx');
 
 // 修复 LD50 (LD50 of acute toxicity) /  LogS (Solubility) 没有第二条数据的问题
 class UpdateExcel {
-    constructor(excelFileUrl, outputUrl) {
+    constructor(mwFile, excelFileUrl, outputUrl) {
+        this.mwFile = mwFile
         this.excelFileUrl = excelFileUrl
         this.outputUrl = outputUrl
     }
@@ -15,20 +16,38 @@ class UpdateExcel {
     //修复 LD50 第二条数据 
     init() {
         try {
-            var input = xlsx.parse(`${this.excelFileUrl}`),
+            var mwData = xlsx.parse(`${this.mwFile}`)[0].data,
+                input = xlsx.parse(`${this.excelFileUrl}`),
                 data = input[0].data,
                 outputUrl = this.outputUrl,
                 toDecimal = this.toDecimal,
-                ld1 = '', ld2 = '';
+                ld1 = '',
+                ld2 = '',
+                mw = 0;
+
             for (let i = 1; i < data.length; i++) {
                 ld1 = data[i][31];
-                ld2 = toDecimal(Math.pow(10, -parseFloat(ld1)) * 314.293 * 1000)
+                mw = mwData[Math.floor((i + 1) / 2)][2];
+                // if(i % 2 === 0){
 
-                console.log(ld1,'===',parseFloat(ld1),'---',ld2)
+                // }
 
-                return;
+                ld2 = toDecimal(Math.pow(10, -parseFloat(ld1)) * mw * 1000)
+                // console.log('name:',data[i][0] ===  mwData[Math.floor((i + 1) / 2)][0],ld1, '---', ld2,'===',mw)
+
+                data[i][31] = ld1.replace('( mg/kg)', `(${ld2}mg/kg)`)
+
+                // console.log('=',data[i][31],'=')
+                // return;
             }
-            var buffer = xlsx.build(input)
+            // input[0].data = data;
+
+            var buffer = xlsx.build(
+                [{
+                    name: 'sheet1',
+                    data: data
+                }]
+            )
 
             fs.writeFile(outputUrl, buffer, function (err) {
                 if (err) {
@@ -46,7 +65,7 @@ class UpdateExcel {
     toDecimal(x) {
         var f = parseFloat(x);
         if (isNaN(f)) {
-            return;
+            return null;
         }
         f = Math.round(x * 1000) / 1000;
         return f;
