@@ -10,9 +10,10 @@ const xlsx = require('node-xlsx');
 
 class ReadExcel {
     constructor(fileUrl) {
-            this.fileUrl = fileUrl
-        }
-        // 处理excel 生成数组
+        this.fileUrl = fileUrl
+    }
+
+    // 处理excel 生成数组
     init() {
         try {
             var excelData = xlsx.parse(this.fileUrl)
