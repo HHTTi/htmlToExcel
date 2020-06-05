@@ -14,6 +14,7 @@ class NewHtmlToExcel {
         this.url = url || 'http://admet.scbdd.com/calcpre/index_sys_result/' //请求url
         this.outputUrl = outputUrl //输出文件
         this.n = 100
+        
         this.excel = [{
             name: 'sheet1',
             data: [
@@ -63,19 +64,22 @@ class NewHtmlToExcel {
     }
 
     // 输入表格 输出为数据
-    async getInitData() {
+    getInitData() {
         try {
 
             var excelData = xlsx.parse(this.inputFile),
                 data = excelData[0].data,
-                newData = [];
+                newData = [],
+                splitData = this.splitData,
+                _this = this;
 
             for (let i = 1; i < data.length; i++) {
                 newData.push({ id: data[i][0], smiles: data[i][1] })
             }
 
-            this.splitData(newData)
+            splitData.call(_this, newData)
             // return newData;
+
         } catch (error) {
             errlog.error('处理excel 生成数组', error)
             // return null;
@@ -83,11 +87,15 @@ class NewHtmlToExcel {
     }
 
     // 切割数据 分为N份
-    async splitData(data) {
+    splitData(data) {
+        infolog.info('this.splitData.bind(this, newData)');
+
         var n = this.n,
             loopList = this.loopList,
             list = [],
             item = [];
+
+
         if (!Array.isArray(data)) {
             errlog.error('切割数据 分为N份', data);
             return;
@@ -106,7 +114,7 @@ class NewHtmlToExcel {
         }
         infolog.info('splitData done 总 ' + data.length + ' 条数据 分成 ', list.length + ' 份');
 
-        loopList(list, data.length);
+        loopList.call(this, list, data.length);
     }
 
     // 循环请求
@@ -120,18 +128,15 @@ class NewHtmlToExcel {
             _this = this;
 
         list.forEach((item, index) => {
-            setTimeout(() => {
-                for (let i = 0; i < item.length; i++) {
+            for (let i = 0; i < item.length; i++) {
 
-                    infolog.info(`${index * n + i}/${length} 开始请求,id: ${item[i].id};`);
-                    await requestHtml.call(_this, item[i], index)
-                }
-            }, 2000)
+                infolog.info(`${index * n + i}/${length} 开始请求,id: ${item[i].id};`);
+
+                await requestHtml.call(_this, item[i], index)
+            }
 
         })
-
     }
-
 
 
     // 请求html
@@ -162,26 +167,97 @@ class NewHtmlToExcel {
                 headers = e.response ? e.response.headers : '';
             errlog.error(`smilesName(${smiles})请求 status:${status},statusText:${statusText},headers:${headers}`);
             if (!errorSmilesToData) {
-                errorData.call(_this, id, smiles);
+                errorData.call(_this, fileIndex, id, smiles);
                 errorSmilesToData = true;
             }
         });
 
     }
 
-    async errorData(name, smiles) {
-        this.predictedData[0].data.push([
-            name,
+    async errorData(fileIndex, id, smiles) {
+        var arr1 = [
+            id,
             smiles,
             '',
-            ''
-        ])
-        this.probabilityData[0].data.push([
-            name,
-            smiles,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
             '',
             ''
-        ])
+        ],
+            arr2 = [
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                ''
+            ]
+        this.writeExcel(fileIndex, arr1, arr2)
     }
 
     // 处理html
