@@ -47,7 +47,7 @@ class GetHtml {
                 outputName = this.outputName,
                 _this = this;
 
-            for (let i = 0; i < smilesName.length; i++) {
+            for (let i = 0; i < 1; i++) {
                 infolog.info(`${i + 1}/${smilesName.length} (dir:${outputName}) 开始请求(${smilesName[i].name})`);
                 await requestHtml.call(_this, smilesName[i], url)
                 if (i == smilesName.length - 1) {
@@ -76,8 +76,8 @@ class GetHtml {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: smiles }),
-        }).then(async(res) => {
-            infolog.info('请求完成,' + 'smilesName:' + smiles);
+        }).then(async (res) => {
+            infolog.info('请求完成,' + 'smilesName:' + smiles+'==',res.data);
             await processData.call(_this, res.data, name, smiles)
         }).catch((e) => {
             // errlog.error('smiles 请求:', e);
@@ -109,6 +109,8 @@ class GetHtml {
     }
 
     // 处理html
+    //  数据处理 更新格式 
+
     async processData(html, name, smiles) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
@@ -118,9 +120,9 @@ class GetHtml {
 
         var $ = cheerio.load(html);
 
-        $(".table-bordered").each(function(index, item) {
+        $(".table-bordered").each(function (index, item) {
 
-            $(this).find('tbody tr').each(function(idx, itm) {
+            $(this).find('tbody tr').each(function (idx, itm) {
                 let one = $(this).children().first().text(),
                     two = $(this).children().eq(1).text(),
                     three = $(this).children().eq(2).text();
@@ -130,6 +132,8 @@ class GetHtml {
                 two = two.trim()
                 three = three.replace(/[\r\n]/g, "")
                 three = three.trim()
+
+                
 
                 _this.predictedData[0].data.push([
                     name,
@@ -144,6 +148,7 @@ class GetHtml {
                     one,
                     three
                 ])
+
 
             })
 
@@ -167,7 +172,7 @@ class GetHtml {
             fs.mkdirSync('public/excel');
         }
 
-        fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function(err) {
+        fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function (err) {
             if (err) {
                 errlog.error("Write Predicted_values_" + outputName + ".xlsx failed: " + err);
                 return;
@@ -175,7 +180,7 @@ class GetHtml {
 
             infolog.info("Write Predicted_values_" + outputName + ".xlsx completed.");
         });
-        fs.writeFile(`public/excel/Probability_${outputName}.xlsx`, probabilityDataBuffer, function(err) {
+        fs.writeFile(`public/excel/Probability_${outputName}.xlsx`, probabilityDataBuffer, function (err) {
             if (err) {
                 errlog.error("Write Probability_" + outputName + ".xlsx failed: " + err);
                 return;
