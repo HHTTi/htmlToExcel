@@ -16,10 +16,30 @@ const MergeExcel = require('./src/mergeExcel')
 const UpdateExcel = require('./src/updateExcel')
 
 const NewHtmlToExcel = require('./src/NewHtmlToExcel')
+const NewSplitExcel = require('./src/NewSplitExcel')
 
-let excel = new NewHtmlToExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
+let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
 
-excel.getInitData();
+let obj = arr.getInitData()
+
+// console.log( arr.getInitData())
+
+// let excel = new NewHtmlToExcel(obj.list, obj.length);
+
+var time = 1;
+
+obj.list.forEach((item, index) => {
+
+    setTimeout(() => {
+        let excel = new NewHtmlToExcel('', '', url, item, index, obj.length);
+        excel.loopList();
+
+    }, time);
+
+    time += 3000
+
+})
+
 
 
 function start(outputName) {
@@ -58,11 +78,6 @@ function start1() {
 // '1_300', '300_600', '600_900', '900_1200', '1200_1500',
 // let arr = ['1500_1800', '1800_2100', '2100_2400', '2400_2700', '2700_2815']
 // let time = 3000;
-// arr.forEach((item) => {
-//     console.log(item)
-//     setTimeout(() => { start(item) }, time);
-//     time += 3000
-// })
 
 // start4()
 // setTimeout(() => { start5() }, 15000)

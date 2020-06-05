@@ -13,28 +13,54 @@ class GetHtml {
         this.smilesName = smilesName
         this.url = url
         this.outputName = outputName
-        this.predictedData = [{
+
+        this.excel = [{
             name: 'sheet1',
             data: [
                 [
-                    'Name',
+                    'Id',
                     'SMILES',
-                    'Property',
-                    'Predicted values'
-                ],
+                    'Log P (Crippen method)',
+                    'HB Acceptor',
+                    'HB Donor',
+                    'TPSA',
+                    '',
+                    'LogS (Solubility)',
+                    'LogD7.4 (Distribution Coefficient D)',
+                    'LogP (Distribution Coefficient P)',
+                    'Papp (Caco-2 Permeability)',
+                    'Pgp-inhibitor',
+                    'Pgp-substrate',
+                    'HIA (Human Intestinal Absorption)',
+                    'F (20% Bioavailability)',
+                    'F (30% Bioavailability)',
+                    'PPB (Plasma Protein Binding)',
+                    'VD (Volume Distribution)',
+                    'BBB (Blood–Brain Barrier)',
+                    'P450 CYP1A2 inhibitor',
+                    'P450 CYP1A2 Substrate',
+                    'P450 CYP3A4 inhibitor',
+                    'P450 CYP3A4 substrate',
+                    'P450 CYP2C9 inhibitor',
+                    'P450 CYP2C9 substrate',
+                    'P450 CYP2C19 inhibitor',
+                    'P450 CYP2C19 substrate',
+                    'P450 CYP2D6 inhibitor',
+                    'P450 CYP2D6 substrate',
+                    'T 1/2 (Half Life Time)',
+                    'CL (Clearance Rate)',
+                    'hERG (hERG Blockers)',
+                    'H-HT (Human Hepatotoxicity)',
+                    'AMES (Ames Mutagenicity)',
+                    'SkinSen (Skin sensitization)',
+                    'LD50 (LD50 of acute toxicity)',
+                    'DILI (Drug Induced Liver Injury)',
+                    'FDAMDD (Maximum Recommended Daily Dose)',
+                    'Molecular Weight'
+                ]
             ]
         }]
-        this.probabilityData = [{
-            name: 'sheet2',
-            data: [
-                [
-                    'Name',
-                    'SMILES',
-                    'Property',
-                    'Probability'
-                ],
-            ]
-        }]
+
     }
 
     // 处理name
@@ -46,12 +72,13 @@ class GetHtml {
                 writeExcel = this.writeExcel,
                 outputName = this.outputName,
                 _this = this;
-
-            for (let i = 0; i < 1; i++) {
-                infolog.info(`${i + 1}/${smilesName.length} (dir:${outputName}) 开始请求(${smilesName[i].name})`);
-                await requestHtml.call(_this, smilesName[i], url)
+            infolog.info('smilesName', smilesName);
+            
+            for (let i = 0; i < smilesName.length; i++) {
+                infolog.info(`${i + 1}/${smilesName.length} (dir:${outputName}) 开始请求(${smilesName[i].id})`);
+                await requestHtml.call(_this, smilesName[i])
                 if (i == smilesName.length - 1) {
-                    await writeExcel.call(_this);
+                    // await writeExcel.call(_this);
                     infolog.info('done!!!');
                 }
             }
@@ -60,14 +87,15 @@ class GetHtml {
     }
 
     // 请求html
-    async requestHtml(itemName, url) {
-        var { name, smiles } = itemName;
-        if (!smiles && !url) {
-            errlog.error('smilesName或url不存在', name, smiles);
+    async requestHtml(item) {
+        var { id, smiles } = item;
+        if (!smiles) {
+            errlog.error('smiles不存在', id, smiles);
             return;
         };
         var processData = this.processData,
             errorData = this.errorData,
+            url = this.url,
             _this = this,
             errorSmilesToData = false;
 
@@ -77,118 +105,212 @@ class GetHtml {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: smiles }),
         }).then(async (res) => {
-            infolog.info('请求完成,' + 'smilesName:' + smiles+'==',res.data);
-            await processData.call(_this, res.data, name, smiles)
+            infolog.info('-- 请求完成,id: ' + id);
+            await processData.call(_this, res.data, id, smiles)
+
         }).catch((e) => {
-            // errlog.error('smiles 请求:', e);
             let status = e.response ? e.response.status : '',
                 statusText = e.response ? e.response.statusText : '',
                 headers = e.response ? e.response.headers : '';
             errlog.error(`smilesName(${smiles})请求 status:${status},statusText:${statusText},headers:${headers}`);
             if (!errorSmilesToData) {
-                errorData.call(_this, name, smiles);
+                errorData.call(_this, id, smiles);
                 errorSmilesToData = true;
             }
         });
 
     }
 
-    async errorData(name, smiles) {
-        this.predictedData[0].data.push([
-            name,
+    async errorData(id, smiles) {
+        var arr1 = [
+            id,
             smiles,
             '',
-            ''
-        ])
-        this.probabilityData[0].data.push([
-            name,
-            smiles,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
             '',
             ''
-        ])
+        ],
+            arr2 = [
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                ''
+            ]
+        this.writeExcel(arr1, arr2)
     }
 
     // 处理html
-    //  数据处理 更新格式 
-
     async processData(html, name, smiles) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
             return false;
         };
-        var _this = this;
+        var arr1 = [name, smiles],
+            arr2 = ['', ''],
+            logP,
+            hbAcceptor,
+            hbDonor,
+            tpsa,
+            logs_1,
+            ld2,
+            molecularWeight,
+            _this = this,
+            toDecimal = this.toDecimal,
+            writeExcel = this.writeExcel,
+            $ = cheerio.load(html);
 
-        var $ = cheerio.load(html);
+        molecularWeight = $("#q_mw").text();
+        logP = $("#q_logp").text();
+        hbAcceptor = $("#q_hacc").text();
+        hbDonor = $("#q_hdon").text();
+        tpsa = $("#q_tpsa").text();
+        logs_1 = $('#logs_1').text();
+
+        arr1.push(logP, hbAcceptor, hbDonor, tpsa, 'Predicted values');
+        arr2.push('', '', '', '', 'Probability');
 
         $(".table-bordered").each(function (index, item) {
 
             $(this).find('tbody tr').each(function (idx, itm) {
-                let one = $(this).children().first().text(),
-                    two = $(this).children().eq(1).text(),
+                // let one = $(this).children().first().text(),
+                let two = $(this).children().eq(1).text(),
                     three = $(this).children().eq(2).text();
-                one = one.replace(/[\r\n]/g, "")
-                one = one.trim()
+                // one = one.replace(/[\r\n]/g, "")
+                // one = one.trim()
                 two = two.replace(/[\r\n]/g, "")
                 two = two.trim()
                 three = three.replace(/[\r\n]/g, "")
                 three = three.trim()
 
-                
+                if (index == 0 && idx == 0) {
+                    ld2 = toDecimal(Math.pow(10, logs_1) * molecularWeight * 1000);
+                    two = two.replace('( mg/kg)', `(${ld2}mg/kg)`);
+                }
+                arr1.push(two)
 
-                _this.predictedData[0].data.push([
-                    name,
-                    smiles,
-                    one,
-                    two
-                ])
-
-                _this.probabilityData[0].data.push([
-                    name,
-                    smiles,
-                    one,
-                    three
-                ])
-
-
+                if (index == 1 || index == 2 || index == 3 || index == 5) {
+                    arr2.push(three)
+                } else {
+                    arr2.push('')
+                }
             })
 
         })
+        arr1.push(molecularWeight);
+        arr2.push('')
 
+        writeExcel.call(_this, arr1, arr2)
         infolog.info(`化合物${name} 数据处理完成!`);
-        return true;
+        // return true;
     }
 
     // 生成excel
-    async writeExcel() {
-        // if (!predictedData || !probabilityData) {
-        //     errlog.error('Fn-writeExcel-predictedData/probabilityData 数据不存在');
-        //     return;
-        // }
-        var outputName = this.outputName;
-        var predictedDataBuffer = xlsx.build(this.predictedData);
-        var probabilityDataBuffer = xlsx.build(this.probabilityData);
+    async writeExcel(arr1, arr2) {
+
+        var outputName = this.outputName,
+            fileUrl = `public/excel/smiles_data_${outputName}.xlsx`,
+            excel;
 
         if (!fs.existsSync('public/excel')) {
             fs.mkdirSync('public/excel');
         }
+        if (!fs.existsSync(fileUrl)) {
 
-        fs.writeFile(`public/excel/Predicted_values_${outputName}.xlsx`, predictedDataBuffer, function (err) {
+            var buffer = xlsx.build(this.excel);
+
+            fs.writeFileSync(fileUrl, buffer);
+        }
+
+        excel = xlsx.parse(`public/excel/smiles_data_${outputName}.xlsx`);
+
+        excel[0].data.push(arr1, arr2)
+
+        fs.writeFile(fileUrl, xlsx.build(excel), function (err) {
             if (err) {
-                errlog.error("Write Predicted_values_" + outputName + ".xlsx failed: " + err);
+                errlog.error("Write " + fileUrl + " failed: " + err);
                 return;
             }
 
-            infolog.info("Write Predicted_values_" + outputName + ".xlsx completed.");
-        });
-        fs.writeFile(`public/excel/Probability_${outputName}.xlsx`, probabilityDataBuffer, function (err) {
-            if (err) {
-                errlog.error("Write Probability_" + outputName + ".xlsx failed: " + err);
-                return;
-            }
-
-            infolog.info("Write Probability_" + outputName + ".xlsx completed.");
+            infolog.info("Write " + arr1[0] + " completed.");
         });
 
+    }
+
+    toDecimal(x) {
+        var f = parseFloat(x);
+        if (isNaN(f)) {
+            return null;
+        }
+        f = Math.round(x * 1000) / 1000;
+        return f;
     }
 
 }

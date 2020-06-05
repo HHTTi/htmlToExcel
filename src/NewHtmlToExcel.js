@@ -9,12 +9,16 @@ const xlsx = require('node-xlsx');
 
 
 class NewHtmlToExcel {
-    constructor(inputFile, outputUrl, url) {
+    constructor(inputFile, outputUrl, url, list, index, length) {
         this.inputFile = inputFile //输入url
         this.url = url || 'http://admet.scbdd.com/calcpre/index_sys_result/' //请求url
         this.outputUrl = outputUrl //输出文件
         this.n = 100
-        
+
+        this.list = list
+        this.index = index
+        this.length = length
+
         this.excel = [{
             name: 'sheet1',
             data: [
@@ -63,78 +67,77 @@ class NewHtmlToExcel {
         }]
     }
 
-    // 输入表格 输出为数据
-    getInitData() {
-        try {
+    // // 输入表格 输出为数据
+    // getInitData() {
+    //     try {
 
-            var excelData = xlsx.parse(this.inputFile),
-                data = excelData[0].data,
-                newData = [],
-                splitData = this.splitData,
-                _this = this;
+    //         var excelData = xlsx.parse(this.inputFile),
+    //             data = excelData[0].data,
+    //             newData = [],
+    //             splitData = this.splitData,
+    //             _this = this;
 
-            for (let i = 1; i < data.length; i++) {
-                newData.push({ id: data[i][0], smiles: data[i][1] })
-            }
+    //         for (let i = 1; i < data.length; i++) {
+    //             newData.push({ id: data[i][0], smiles: data[i][1] })
+    //         }
 
-            splitData.call(_this, newData)
-            // return newData;
+    //         splitData.call(_this, newData)
+    //         // return newData;
 
-        } catch (error) {
-            errlog.error('处理excel 生成数组', error)
-            // return null;
-        }
-    }
+    //     } catch (error) {
+    //         errlog.error('处理excel 生成数组', error)
+    //         // return null;
+    //     }
+    // }
 
-    // 切割数据 分为N份
-    splitData(data) {
-        infolog.info('this.splitData.bind(this, newData)');
+    // // 切割数据 分为N份
+    // splitData(data) {
+    //     infolog.info('this.splitData.bind(this, newData)');
 
-        var n = this.n,
-            loopList = this.loopList,
-            list = [],
-            item = [];
+    //     var n = this.n,
+    //         loopList = this.loopList,
+    //         list = [],
+    //         item = [];
 
 
-        if (!Array.isArray(data)) {
-            errlog.error('切割数据 分为N份', data);
-            return;
-        };
+    //     if (!Array.isArray(data)) {
+    //         errlog.error('切割数据 分为N份', data);
+    //         return;
+    //     };
 
-        for (let i = 0; i < data.length; i++) {
-            if (i > 1 && i % n == 0 || i == data.length - 1) {
-                list.push(item)
-                item = [];
-            }
-            item.push(data[i]);
-            // if (i == 51) {
-            //     infolog.info('newData done', list);
-            //     return;
-            // }
-        }
-        infolog.info('splitData done 总 ' + data.length + ' 条数据 分成 ', list.length + ' 份');
+    //     for (let i = 0; i < data.length; i++) {
+    //         if (i > 1 && i % n == 0 || i == data.length - 1) {
+    //             list.push(item)
+    //             item = [];
+    //         }
+    //         item.push(data[i]);
+    //         // if (i == 51) {
+    //         //     infolog.info('newData done', list);
+    //         //     return;
+    //         // }
+    //     }
+    //     infolog.info('splitData done 总 ' + data.length + ' 条数据 分成 ', list.length + ' 份');
 
-        loopList.call(this, list, data.length);
-    }
+    //     loopList.call(this, list, data.length);
+    // }
 
     // 循环请求
-    async loopList(list, length) {
-        if (!Array.isArray(list)) {
-            errlog.error('循环请求', length, list);
-            return;
-        }
-        var n = this.n,
+    loopList() {
+        var list = this.list,
+            length = this.length,
+            index = this.index,
+            n = this.n,
             requestHtml = this.requestHtml,
             _this = this;
+        
 
-        list.forEach((item, index) => {
-            for (let i = 0; i < item.length; i++) {
+        list.forEach(async (itm, idx) => {
 
-                infolog.info(`${index * n + i}/${length} 开始请求,id: ${item[i].id};`);
+            infolog.info(`${index * n + idx}/${length} 开始请求,id: ${itm.id};`);
 
-                await requestHtml.call(_this, item[i], index)
-            }
+            // await requestHtml.call(_this, itm, index)
 
+            
         })
     }
 
