@@ -16,7 +16,7 @@ class UpdateExcel {
     //修复 LD50 第二条数据 
     init() {
         try {
-            var mwData = xlsx.parse(`${this.mwFile}`)[0].data,
+            var
                 input = xlsx.parse(`${this.excelFileUrl}`),
                 data = input[0].data,
                 outputUrl = this.outputUrl,
@@ -26,19 +26,26 @@ class UpdateExcel {
                 mw = 0;
 
             for (let i = 1; i < data.length; i++) {
-                ld1 = data[i][31];
-                mw = mwData[Math.floor((i + 1) / 2)][2];
+                // ld1 = data[i][31];
+                // mw = mwData[Math.floor((i + 1) / 2)][2];
                 // if(i % 2 === 0){
 
                 // }
+                if ( i % 2 == 0) {
+                    data[i][0] = ''
+                    data[i][1] = ''
+                    data[i][3] = ''
+                    data[i][4] = ''
+                    data[i][5] = ''
+                    data[i][25] = ''
+                    data[i][26] = ''
+                }
 
-                ld2 = toDecimal(Math.pow(10, -parseFloat(ld1)) * mw * 1000)
+                // ld2 = toDecimal(Math.pow(10, -parseFloat(ld1)) * mw * 1000)
                 // console.log('name:',data[i][0] ===  mwData[Math.floor((i + 1) / 2)][0],ld1, '---', ld2,'===',mw)
 
-                data[i][31] = ld1.replace('( mg/kg)', `(${ld2}mg/kg)`)
+                // data[i][31] = ld1.replace('( mg/kg)', `(${ld2}mg/kg)`)
 
-                // console.log('=',data[i][31],'=')
-                // return;
             }
             // input[0].data = data;
 
@@ -61,6 +68,8 @@ class UpdateExcel {
             errlog.error('修复 LD50 第二条数据', error)
         }
     }
+
+
 
     toDecimal(x) {
         var f = parseFloat(x);

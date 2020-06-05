@@ -15,6 +15,13 @@ const SplitExcel = require('./src/splitExcel')
 const MergeExcel = require('./src/mergeExcel')
 const UpdateExcel = require('./src/updateExcel')
 
+const NewHtmlToExcel = require('./src/NewHtmlToExcel')
+
+let excel = new NewHtmlToExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
+
+excel.getInitData();
+
+
 function start(outputName) {
 
     let excel = new ReadExcel(path.join(__dirname, `public/output/smiles_${outputName}.xlsx`));
@@ -103,7 +110,7 @@ function merge() {
 function updateExcel() {
     let update = new UpdateExcel(
         'public/input/smiles_mw.xlsx',
-        'public/input/smiles_all.xlsx',
+        'public/input/smiles_all_update.xlsx',
         'public/output/smiles_all_update.xlsx'
     )
     update.init()
