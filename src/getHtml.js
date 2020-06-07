@@ -73,7 +73,7 @@ class GetHtml {
                 outputName = this.outputName,
                 _this = this;
             infolog.info('smilesName', smilesName);
-            
+
             for (let i = 0; i < smilesName.length; i++) {
                 infolog.info(`${i + 1}/${smilesName.length} (dir:${outputName}) 开始请求(${smilesName[i].id})`);
                 await requestHtml.call(_this, smilesName[i])
@@ -220,6 +220,9 @@ class GetHtml {
             hbDonor,
             tpsa,
             logs_1,
+            logs_2,
+            ld50_1,
+            ld50_2,
             ld2,
             molecularWeight,
             _this = this,
@@ -232,7 +235,15 @@ class GetHtml {
         hbAcceptor = $("#q_hacc").text();
         hbDonor = $("#q_hdon").text();
         tpsa = $("#q_tpsa").text();
+
         logs_1 = $('#logs_1').text();
+        logs_2 = toDecimal(Math.pow(10, logs_1) * Number(molecularWeight) * 1000);
+        $('#logs_2').text(logs_2);
+
+        ld50_1 = $('#ld50_1').text();
+        ld50_2 = toDecimal(Math.pow(10, -ld50_1) * Number(molecularWeight) * 1000);
+        $('#ld50_2').text(ld50_2);
+
 
         arr1.push(logP, hbAcceptor, hbDonor, tpsa, 'Predicted values');
         arr2.push('', '', '', '', 'Probability');
@@ -250,10 +261,6 @@ class GetHtml {
                 three = three.replace(/[\r\n]/g, "")
                 three = three.trim()
 
-                if (index == 0 && idx == 0) {
-                    ld2 = toDecimal(Math.pow(10, logs_1) * molecularWeight * 1000);
-                    two = two.replace('( mg/kg)', `(${ld2}mg/kg)`);
-                }
                 arr1.push(two)
 
                 if (index == 1 || index == 2 || index == 3 || index == 5) {
