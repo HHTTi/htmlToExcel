@@ -16,70 +16,112 @@ const SplitExcel = require('./src/splitExcel')
 const MergeExcel = require('./src/mergeExcel')
 
 const NewSplitExcel = require('./src/NewSplitExcel')
-
-let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
-
-let obj = arr.getInitData()
-
-// infolog.info('obj', obj.list[0])
-
-function start(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start1(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start2(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start3(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start4(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start5(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start6(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start7(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start8(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start9(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start10(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start11(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start12(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start13(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start14(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start15(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start16(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start17(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start18(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start19(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start20(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start21(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start22(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start23(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start24(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start25(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start26(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
-function start27(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+const NewMergeExcel = require('./src/NewMergeExcel')
+const NewUpdateExcel = require('./src/NewUpdateExcel')
 
 
-// start1(1)
+// let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
+// let obj = arr.getInitData()
 
-// setTimeout(() => { start2(2) }, 2000)
-// setTimeout(() => { start3(3) }, 4000)
-// setTimeout(() => { start4(4) }, 6000)
-// setTimeout(() => { start5(5) }, 8000)
-// setTimeout(() => { start6(6) }, 10000)
-// setTimeout(() => { start7(7) }, 12000)
-// setTimeout(() => { start8(8) }, 14000)
-// setTimeout(() => { start9(9) }, 16000)
-// setTimeout(() => { start10(10) }, 18000)
-// setTimeout(() => { start11(11) }, 20000)
-// setTimeout(() => { start12(12) }, 22000)
-// setTimeout(() => { start13(13) }, 24000)
-// setTimeout(() => { start14(14) }, 26000)
-// setTimeout(() => { start15(15) }, 28000)
-// setTimeout(() => { start16(16) }, 30000)
-// setTimeout(() => { start17(17) }, 32000)
-// setTimeout(() => { start18(18) }, 34000)
-// setTimeout(() => { start19(19) }, 36000)
-// setTimeout(() => { start20(20) }, 38000)
-// setTimeout(() => { start21(21) }, 40000)
-// setTimeout(() => { start22(22) }, 42000)
-// setTimeout(() => { start23(23) }, 44000)
-// setTimeout(() => { start24(24) }, 46000)
-// setTimeout(() => { start25(25) }, 48000)
-// setTimeout(() => { start26(26) }, 50000)
+
+// new NewMergeExcel().init();
+
+
+
+
+// startNewUpdateExcel
+function start(outputName) { new NewUpdateExcel(outputName).init() }
+function start1(outputName) { new NewUpdateExcel(outputName).init() }
+function start2(outputName) { new NewUpdateExcel(outputName).init() }
+function start3(outputName) { new NewUpdateExcel(outputName).init() }
+function start4(outputName) { new NewUpdateExcel(outputName).init() }
+function start5(outputName) { new NewUpdateExcel(outputName).init() }
+function start6(outputName) { new NewUpdateExcel(outputName).init() }
+function start7(outputName) { new NewUpdateExcel(outputName).init() }
+function start8(outputName) { new NewUpdateExcel(outputName).init() }
+function start9(outputName) { new NewUpdateExcel(outputName).init() }
+function start10(outputName) { new NewUpdateExcel(outputName).init() }
+function start11(outputName) { new NewUpdateExcel(outputName).init() }
+function start12(outputName) { new NewUpdateExcel(outputName).init() }
+function start13(outputName) { new NewUpdateExcel(outputName).init() }
+function start14(outputName) { new NewUpdateExcel(outputName).init() }
+function start15(outputName) { new NewUpdateExcel(outputName).init() }
+function start16(outputName) { new NewUpdateExcel(outputName).init() }
+function start17(outputName) { new NewUpdateExcel(outputName).init() }
+function start18(outputName) { new NewUpdateExcel(outputName).init() }
+function start19(outputName) { new NewUpdateExcel(outputName).init() }
+function start20(outputName) { new NewUpdateExcel(outputName).init() }
+function start21(outputName) { new NewUpdateExcel(outputName).init() }
+function start22(outputName) { new NewUpdateExcel(outputName).init() }
+function start23(outputName) { new NewUpdateExcel(outputName).init() }
+function start24(outputName) { new NewUpdateExcel(outputName).init() }
+function start25(outputName) { new NewUpdateExcel(outputName).init() }
+function start26(outputName) { new NewUpdateExcel(outputName).init() }
+function start27(outputName) { new NewUpdateExcel(outputName).init() }
+
+
+
+// startGetHtml
+// function start(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start1(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start2(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start3(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start4(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start5(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start6(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start7(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start8(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start9(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start10(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start11(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start12(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start13(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start14(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start15(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start16(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start17(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start18(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start19(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start20(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start21(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start22(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start23(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start24(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start25(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start26(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+// function start27(outputName) { new GetHtml(obj.list[outputName - 1], url, outputName).init() }
+
+function startGetHtml() {
+    start1(1)
+    setTimeout(() => { start2(2) }, 2000)
+    setTimeout(() => { start3(3) }, 4000)
+    setTimeout(() => { start4(4) }, 6000)
+    setTimeout(() => { start5(5) }, 8000)
+    setTimeout(() => { start6(6) }, 10000)
+    setTimeout(() => { start7(7) }, 12000)
+    setTimeout(() => { start8(8) }, 14000)
+    setTimeout(() => { start9(9) }, 16000)
+    setTimeout(() => { start10(10) }, 18000)
+    setTimeout(() => { start11(11) }, 20000)
+    setTimeout(() => { start12(12) }, 22000)
+    setTimeout(() => { start13(13) }, 24000)
+    setTimeout(() => { start14(14) }, 26000)
+    setTimeout(() => { start15(15) }, 28000)
+    setTimeout(() => { start16(16) }, 30000)
+    setTimeout(() => { start17(17) }, 32000)
+    setTimeout(() => { start18(18) }, 34000)
+    setTimeout(() => { start19(19) }, 36000)
+    setTimeout(() => { start20(20) }, 38000)
+    setTimeout(() => { start21(21) }, 40000)
+    setTimeout(() => { start22(22) }, 42000)
+    setTimeout(() => { start23(23) }, 44000)
+    setTimeout(() => { start24(24) }, 46000)
+    setTimeout(() => { start25(25) }, 48000)
+    // setTimeout(() => { start26(26) }, 50000)/
+}
+
+// startGetHtml()
+
 
 // setTimeout(() => { start27(27) }, 52000)
 
@@ -250,6 +292,8 @@ function start27(outputName) { new GetHtml(obj.list[outputName - 1], url, output
 // setTimeout(() => { start7() }, 6000)
 // setTimeout(() => { start8() }, 9000)
 // setTimeout(() => { start9() }, 12000)
+
+
 
 
 function split() {
