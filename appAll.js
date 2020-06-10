@@ -23,10 +23,10 @@ const NewUpdateExcel = require('./src/NewUpdateExcel')
 // let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
 // let obj = arr.getInitData()
 
-
+// arr.splitExcel()
 // new NewMergeExcel().init();
 
-
+// new NewUpdateExcel('all').init()
 
 
 // startNewUpdateExcel

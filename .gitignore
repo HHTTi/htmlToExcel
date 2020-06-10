@@ -1,7 +1,7 @@
 node_modules/
 .vscode/
 logs/
-public/excel
+# public/excel
 package-lock.json
-public/input
-public/output
+# public/input
+# public/output
