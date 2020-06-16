@@ -19,6 +19,9 @@ const NewSplitExcel = require('./src/NewSplitExcel')
 const NewMergeExcel = require('./src/NewMergeExcel')
 const NewUpdateExcel = require('./src/NewUpdateExcel')
 
+const NewGetHtml = require('./src/rule1/getHtml')
+
+new NewGetHtml().init()
 
 // let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
 // let obj = arr.getInitData()
