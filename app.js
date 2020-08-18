@@ -1,7 +1,7 @@
-const cors = require("cors")
+// const cors = require("cors")
 const path = require('path');
 
-const { url } = require('./config')
+// const { url } = require('./config')
 
 const log4js = require('./src/middleware/logger')
 
@@ -17,30 +17,37 @@ const UpdateExcel = require('./src/updateExcel')
 
 const NewHtmlToExcel = require('./src/NewHtmlToExcel')
 const NewSplitExcel = require('./src/NewSplitExcel')
+const NewGetHtml = require('./src/rule1/getHtml')
 
 let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
 
-let obj = arr.getInitData()
+// let obj = arr.getInitData()
 
 // console.log( arr.getInitData())
+// inputFile, outputUrl, url, list, index, length
+let inputFile = 'public/input/2.xlsx',
+    outputUrl = "public/output/smile_out_2.xlsx",
+    url = 'http://admet.scbdd.com/calcpre/index_sys_result/',
+    fileIndex = 817;
 
-// let excel = new NewHtmlToExcel(obj.list, obj.length);
+let excel = new NewHtmlToExcel(inputFile, outputUrl, url, fileIndex);
+excel.init()
+// var time = 1;
 
-var time = 1;
+// obj.list.forEach((item, index) => {
 
-obj.list.forEach((item, index) => {
+//     setTimeout(() => {
+//         let excel = new NewHtmlToExcel('', '', url, item, index, obj.length);
+//         excel.loopList();
 
-    setTimeout(() => {
-        let excel = new NewHtmlToExcel('', '', url, item, index, obj.length);
-        excel.loopList();
+//     }, time);
 
-    }, time);
+//     time += 3000
 
-    time += 3000
+// })
+// let excel = new NewGetHtml()
 
-})
-
-
+// excel.init()
 
 function start(outputName) {
 

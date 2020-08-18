@@ -9,20 +9,21 @@ const xlsx = require('node-xlsx');
 
 
 class NewHtmlToExcel {
-    constructor(inputFile, outputUrl, url, list, index, length) {
+    constructor(inputFile, outputUrl, url, fileIndex, list, index, length) {
         this.inputFile = inputFile //输入url
         this.url = url || 'http://admet.scbdd.com/calcpre/index_sys_result/' //请求url
         this.outputUrl = outputUrl //输出文件
         this.n = 100
-
-        this.list = list
-        this.index = index
-        this.length = length
+        this.fileIndex = fileIndex
+        // this.list = list
+        // this.index = index
+        // this.length = length
 
         this.excel = [{
             name: 'sheet1',
             data: [
                 [
+                    'NAME',
                     'Id',
                     'SMILES',
                     'Log P (Crippen method)',
@@ -129,7 +130,7 @@ class NewHtmlToExcel {
             n = this.n,
             requestHtml = this.requestHtml,
             _this = this;
-        
+
 
         list.forEach(async (itm, idx) => {
 
@@ -137,14 +138,42 @@ class NewHtmlToExcel {
 
             // await requestHtml.call(_this, itm, index)
 
-            
+
         })
     }
 
+    // 处理name
+    async init() {
+        var excelData = xlsx.parse(this.inputFile)
+
+        var data = excelData[0].data;
+
+        var requestHtml = this.requestHtml,
+            _this = this;
+
+        for (let i = 1; i < data.length; i++) {
+
+            infolog.info(`${i}/${data.length} 开始请求(${data[i][0]})smiles:(${data[i][2]})`);
+
+            await requestHtml.call(_this, data[i], this.fileIndex)
+            if (i == data.length - 1) {
+                // await writeExcel.call(_this);
+                infolog.info('done!!!');
+            }
+            // return;
+        }
+
+    }
 
     // 请求html
     async requestHtml(item, fileIndex) {
-        var { id, smiles } = item;
+        // var { id, smiles } = item;
+        var name = item[0],
+            smiles = item[2],
+            id = item[1];
+
+        console.log(item);
+        // return;
         if (!smiles) {
             errlog.error('smiles不存在', id, smiles);
             return;
@@ -162,23 +191,25 @@ class NewHtmlToExcel {
             data: qs.stringify({ smiles: smiles }),
         }).then(async (res) => {
             infolog.info('-- 请求完成,id: ' + id);
-            await processData.call(_this, res.data, id, smiles, fileIndex)
+            await processData.call(_this, res.data, name, id, smiles, fileIndex)
 
         }).catch((e) => {
+            console.log(e)
             let status = e.response ? e.response.status : '',
                 statusText = e.response ? e.response.statusText : '',
                 headers = e.response ? e.response.headers : '';
             errlog.error(`smilesName(${smiles})请求 status:${status},statusText:${statusText},headers:${headers}`);
             if (!errorSmilesToData) {
-                errorData.call(_this, fileIndex, id, smiles);
+                errorData.call(_this, fileIndex, name, id, smiles);
                 errorSmilesToData = true;
             }
         });
 
     }
 
-    async errorData(fileIndex, id, smiles) {
+    async errorData(fileIndex, name, id, smiles) {
         var arr1 = [
+            name,
             id,
             smiles,
             '',
@@ -258,24 +289,28 @@ class NewHtmlToExcel {
                 '',
                 '',
                 '',
+                '',
                 ''
             ]
         this.writeExcel(fileIndex, arr1, arr2)
     }
 
     // 处理html
-    async processData(html, name, smiles, fileIndex) {
+    async processData(html, name, id, smiles, fileIndex) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
             return false;
         };
-        var arr1 = [name, smiles],
-            arr2 = ['', ''],
+        var arr1 = [name, id, smiles],
+            arr2 = ['', '', ''],
             logP,
             hbAcceptor,
             hbDonor,
             tpsa,
             logs_1,
+            logs_2,
+            ld50_1,
+            ld50_2,
             ld2,
             molecularWeight,
             _this = this,
@@ -288,7 +323,15 @@ class NewHtmlToExcel {
         hbAcceptor = $("#q_hacc").text();
         hbDonor = $("#q_hdon").text();
         tpsa = $("#q_tpsa").text();
+
         logs_1 = $('#logs_1').text();
+        logs_2 = toDecimal(Math.pow(10, logs_1) * Number(molecularWeight) * 1000);
+        $('#logs_2').text(logs_2);
+
+        ld50_1 = $('#ld50_1').text();
+        ld50_2 = toDecimal(Math.pow(10, -ld50_1) * Number(molecularWeight) * 1000);
+        $('#ld50_2').text(ld50_2);
+
 
         arr1.push(logP, hbAcceptor, hbDonor, tpsa, 'Predicted values');
         arr2.push('', '', '', '', 'Probability');
@@ -306,10 +349,6 @@ class NewHtmlToExcel {
                 three = three.replace(/[\r\n]/g, "")
                 three = three.trim()
 
-                if (index == 0 && idx == 0) {
-                    ld2 = toDecimal(Math.pow(10, logs_1) * molecularWeight * 1000);
-                    two = two.replace('( mg/kg)', `(${ld2}mg/kg)`);
-                }
                 arr1.push(two)
 
                 if (index == 1 || index == 2 || index == 3 || index == 5) {
@@ -323,7 +362,7 @@ class NewHtmlToExcel {
         arr1.push(molecularWeight);
         arr2.push('')
 
-        writeExcel(fileIndex, arr1, arr2)
+        writeExcel.call(_this, fileIndex, arr1, arr2)
         infolog.info(`化合物${name} 数据处理完成!`);
         // return true;
     }

@@ -10,9 +10,9 @@ const xlsx = require('node-xlsx');
 
 class NewGetHtml {
     constructor(inputFile, outputUrl, url, list, index, length) {
-        this.inputFile = inputFile || 'public/excel/smiles.xlsx'
+        this.inputFile = inputFile || 'public/input/2.xlsx'
         this.url = url || 'http://admet.scbdd.com/calcpre/calc_rules_single_mol/' //请求url
-        this.outputUrl = outputUrl || 'public/excel/smiles_lipinskis_rules.xlsx'   //输出文件
+        this.outputUrl = outputUrl || 'public/excel/new3.xlsx'   //输出文件
 
         this.n = 100
 
@@ -24,9 +24,9 @@ class NewGetHtml {
             name: 'sheet1',
             data: [
                 [
-                    '序号',
                     'Name',
-                    'SMILES',
+                    'CID',
+                    'Canonical_SMILES',
                     'Hydrogen bond donor',
                     'Hydrogen bond acceptor',
                     'Matches',
@@ -63,8 +63,8 @@ class NewGetHtml {
     async requestHtml(item) {
         // var { id, smiles } = item;
         var name = item[0],
-            smiles = item[1],
-            id = item[2];
+            smiles = item[2],
+            id = item[1];
 
         if (!smiles) {
             errlog.error('smiles不存在', name, smiles);
@@ -100,8 +100,8 @@ class NewGetHtml {
 
     async errorData(name, smiles, id) {
         var arr1 = [
-            id,
             name,
+            id,
             smiles,
             '',
             '',
@@ -117,7 +117,7 @@ class NewGetHtml {
             errlog.error('Fn-processData-html不存在');
             return false;
         };
-        var arr1 = [id, name, smiles],
+        var arr1 = [name, id, smiles],
             _this = this,
             writeExcel = this.writeExcel,
             $ = cheerio.load(html);
@@ -144,7 +144,7 @@ class NewGetHtml {
     // 生成excel
     async writeExcel(arr1) {
 
-        var fileUrl = `public/excel/smiles_lipinskis_rules.xlsx`,
+        var fileUrl = this.outputUrl,
             excel;
 
         if (!fs.existsSync('public/excel')) {
@@ -157,7 +157,7 @@ class NewGetHtml {
             fs.writeFileSync(fileUrl, buffer);
         }
 
-        excel = xlsx.parse(`public/excel/smiles_lipinskis_rules.xlsx`);
+        excel = xlsx.parse(fileUrl);
 
         excel[0].data.push(arr1)
 
