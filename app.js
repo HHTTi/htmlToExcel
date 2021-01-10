@@ -18,20 +18,65 @@ const UpdateExcel = require('./src/updateExcel')
 const NewHtmlToExcel = require('./src/NewHtmlToExcel')
 const NewSplitExcel = require('./src/NewSplitExcel')
 const NewGetHtml = require('./src/rule1/getHtml')
+const admetsar1 = require('./src/lmmdEcustEdu/admetsar1');
+const admetsar2 = require('./src/lmmdEcustEduNew/admetsar2');
 
-let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
+const UpdateExcel818 = require('./src/rule2/updateExcel');
+
+// let arr = new NewSplitExcel(path.join(__dirname, `public/input/DRUGBANK_smiles.csv`));
+
+var args = process.argv.splice(2)
+
+if (args[0]) {
+    switch (args[0]) {
+        case 'admetsarFn':
+            admetsarFn()
+            break;
+        case 'newGetHtmlFn':
+            newGetHtmlFn()
+            break;
+        case 'admetsar2Fn':
+            admetsar2Fn()
+            break;
+
+    }
+}
+
+function admetsarFn() {
+    let inputFile = 'public/input/Bis2R3S4S5R6S62S3R4R.xlsx'
+    let a = new admetsar1(inputFile);
+    a.init()
+}
+
+function admetsar2Fn() {
+    let inputFile = 'public/excel/admetsar2_2021.01.10.xlsx'
+    let a = new admetsar2(inputFile);
+}
 
 // let obj = arr.getInitData()
 
 // console.log( arr.getInitData())
-// inputFile, outputUrl, url, list, index, length
-let inputFile = 'public/input/2.xlsx',
-    outputUrl = "public/output/smile_out_2.xlsx",
-    url = 'http://admet.scbdd.com/calcpre/index_sys_result/',
-    fileIndex = 817;
+function newHtmlToExcel() {
+    // inputFile, outputUrl, url, list, index, length
+    let inputFile = 'public/input/2.xlsx',
+        outputUrl = "public/output/smile_out_2.xlsx",
+        url = 'http://admet.scbdd.com/calcpre/index_sys_result/',
+        fileIndex = 817;
 
-let excel = new NewHtmlToExcel(inputFile, outputUrl, url, fileIndex);
-excel.init()
+    let excel = new NewHtmlToExcel(inputFile, outputUrl, url, fileIndex);
+    excel.init()
+}
+
+
+function updateExcel818() {
+    let input = "public/input/smiles_data_816(已自动还原).xlsx",
+        output = "public/output/smiles_data_816(已自动还原)_new.xlsx"
+    let excel = new UpdateExcel818(input, output);
+    excel.init()
+}
+
+// updateExcel818()
+
 // var time = 1;
 
 // obj.list.forEach((item, index) => {
@@ -48,6 +93,14 @@ excel.init()
 // let excel = new NewGetHtml()
 
 // excel.init()
+function newGetHtmlFn(){
+    let inputFile =  "public/excel/6621.xlsx", 
+        outputUrl = "public/output/";
+
+    let excel = new NewGetHtml(inputFile,outputUrl)
+
+    excel.init()
+}
 
 function start(outputName) {
 
