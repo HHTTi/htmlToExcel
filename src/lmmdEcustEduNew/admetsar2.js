@@ -16,7 +16,7 @@ class admetsar2 {
         */
         this.url = 'http://lmmd.ecust.edu.cn/admetsar2/result/'
         this.stepOneUrl = 'http://lmmd.ecust.edu.cn/admetsar2/result/'
-      
+        this.curIndex = 1
         this.excel = [{
             name: '成功',
             data: [
@@ -24,7 +24,7 @@ class admetsar2 {
                     'Molecule',
                     'Compound',
                     'Canonical SMILES',
-                    "Molecular Weight","AlogP","H-Bond Acceptor","H-Bond Donor","Rotatable Bonds","Applicability Domain","Human Intestinal Absorption","Caco-2","Blood Brain Barrier","Human oral bioavailability","Subcellular localzation","OATP2B1 inhibitior","OATP1B1 inhibitior","OATP1B3 inhibitior","MATE1 inhibitior","OCT2 inhibitior","BSEP inhibitior","P-glycoprotein inhibitior","P-glycoprotein substrate","CYP3A4 substrate","CYP2C9 substrate","CYP2D6 substrate","CYP3A4 inhibition","CYP2C9 inhibition","CYP2C19 inhibition","CYP2D6 inhibition","CYP1A2 inhibition","CYP inhibitory promiscuity","UGT catelyzed","Carcinogenicity (binary)","Carcinogenicity (trinary)","Eye corrosion","Eye irritation","Ames mutagenesis","Human either-a-go-go inhibition","micronuclear","Hepatotoxicity","Acute Oral Toxicity (c)","Estrogen receptor binding","Androgen receptor binding","Thyroid receptor binding","Glucocorticoid receptor binding","Aromatase binding","PPAR gamma","Honey bee toxicity","Biodegradation","crustacea aquatic toxicity","Fish aquatic toxicity","Water solubility","Plasma protein binding","Acute Oral Toxicity","Tetrahymena pyriformis"
+                    "Molecular Weight","AlogP","H-Bond Acceptor","H-Bond Donor","Rotatable Bonds","Human Intestinal Absorption","Caco-2","Blood Brain Barrier","Human oral bioavailability","Subcellular localzation","OATP2B1 inhibitior","OATP1B1 inhibitior","OATP1B3 inhibitior","MATE1 inhibitior","OCT2 inhibitior","BSEP inhibitior","P-glycoprotein inhibitior","P-glycoprotein substrate","CYP3A4 substrate","CYP2C9 substrate","CYP2D6 substrate","CYP3A4 inhibition","CYP2C9 inhibition","CYP2C19 inhibition","CYP2D6 inhibition","CYP1A2 inhibition","CYP inhibitory promiscuity","UGT catelyzed","Carcinogenicity (binary)","Carcinogenicity (trinary)","Eye corrosion","Eye irritation","Ames mutagenesis","Human either-a-go-go inhibition","micronuclear","Hepatotoxicity","Acute Oral Toxicity (c)","Estrogen receptor binding","Androgen receptor binding","Thyroid receptor binding","Glucocorticoid receptor binding","Aromatase binding","PPAR gamma","Honey bee toxicity","Biodegradation","crustacea aquatic toxicity","Fish aquatic toxicity","Water solubility","Plasma protein binding","Acute Oral Toxicity","Tetrahymena pyriformis"
                 ]
             ]
         },
@@ -53,13 +53,14 @@ class admetsar2 {
                 url = this.url,
                 _this = this;
 
-            var fileUrl = `public/excel/admetsar2_smiles_data_20210110.xlsx`;
+            var fileUrl = `public/output/admetsar2_smiles_data_20210112.xlsx`;
 
-            if (!fs.existsSync('public/excel')) {
-                fs.mkdirSync('public/excel');
+            if (!fs.existsSync('public/output')) {
+                fs.mkdirSync('public/output');
             }
 
-            for (let i = 1; i < data.length; i++) {
+            for (let i = this.curIndex; i < data.length; i++) {
+                this.curIndex = i;
                 var name = data[i][1],
                     smiles = data[i][2].trim(),
                     id = data[i][0];
@@ -68,14 +69,18 @@ class admetsar2 {
                     errlog.error('smiles不存在', id);
                     return; 
                 };
+                if(data[i][3]) {
+                    this.excel[0].data.push(data[i])
+                    continue;
+                }
                 infolog.info(`第${i}/${data.length}个请求 Compound:{{${name}}}`);
     
                 let one = await stepOne(url, smiles)
 
-
                 if(one.data.error) {
                     this.excel[0].data.push(data[i])
                     this.excel[1].data.push(data[i])
+                    errlog.error('smiles', id,one.data.error);
                 } else if(one.data.result) {
                     let tid = one.data.result;
                     for(let j = 0;j<100;j++) {
@@ -111,6 +116,7 @@ class admetsar2 {
                 } 
             }
         } catch (e) {
+            this.init(this.curIndex);
             errlog.error(e);
         }
     }
