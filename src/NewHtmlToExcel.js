@@ -9,23 +9,19 @@ const xlsx = require('node-xlsx');
 
 
 class NewHtmlToExcel {
-    constructor(inputFile, outputUrl, url, fileIndex, list, index, length) {
+    constructor(inputFile, url, fileIndex) {
         this.inputFile = inputFile //输入url
         this.url = url || 'http://admet.scbdd.com/calcpre/index_sys_result/' //请求url
-        this.outputUrl = outputUrl //输出文件
-        this.n = 100
         this.fileIndex = fileIndex
-        // this.list = list
-        // this.index = index
-        // this.length = length
 
         this.excel = [{
             name: 'sheet1',
             data: [
                 [
-                    'NAME',
-                    'Id',
-                    'SMILES',
+                    'Molecule',
+                    'CID',
+                    'Compound',
+                    'Canonical SMILES',
                     'Log P (Crippen method)',
                     'HB Acceptor',
                     'HB Donor',
@@ -66,98 +62,28 @@ class NewHtmlToExcel {
                 ]
             ]
         }]
-    }
 
-    // // 输入表格 输出为数据
-    // getInitData() {
-    //     try {
-
-    //         var excelData = xlsx.parse(this.inputFile),
-    //             data = excelData[0].data,
-    //             newData = [],
-    //             splitData = this.splitData,
-    //             _this = this;
-
-    //         for (let i = 1; i < data.length; i++) {
-    //             newData.push({ id: data[i][0], smiles: data[i][1] })
-    //         }
-
-    //         splitData.call(_this, newData)
-    //         // return newData;
-
-    //     } catch (error) {
-    //         errlog.error('处理excel 生成数组', error)
-    //         // return null;
-    //     }
-    // }
-
-    // // 切割数据 分为N份
-    // splitData(data) {
-    //     infolog.info('this.splitData.bind(this, newData)');
-
-    //     var n = this.n,
-    //         loopList = this.loopList,
-    //         list = [],
-    //         item = [];
-
-
-    //     if (!Array.isArray(data)) {
-    //         errlog.error('切割数据 分为N份', data);
-    //         return;
-    //     };
-
-    //     for (let i = 0; i < data.length; i++) {
-    //         if (i > 1 && i % n == 0 || i == data.length - 1) {
-    //             list.push(item)
-    //             item = [];
-    //         }
-    //         item.push(data[i]);
-    //         // if (i == 51) {
-    //         //     infolog.info('newData done', list);
-    //         //     return;
-    //         // }
-    //     }
-    //     infolog.info('splitData done 总 ' + data.length + ' 条数据 分成 ', list.length + ' 份');
-
-    //     loopList.call(this, list, data.length);
-    // }
-
-    // 循环请求
-    loopList() {
-        var list = this.list,
-            length = this.length,
-            index = this.index,
-            n = this.n,
-            requestHtml = this.requestHtml,
-            _this = this;
-
-
-        list.forEach(async (itm, idx) => {
-
-            infolog.info(`${index * n + idx}/${length} 开始请求,id: ${itm.id};`);
-
-            // await requestHtml.call(_this, itm, index)
-
-
-        })
     }
 
     // 处理name
     async init() {
         var excelData = xlsx.parse(this.inputFile)
 
-        var data = excelData[0].data;
+        var data = excelData[this.fileIndex].data;
 
         var requestHtml = this.requestHtml,
             _this = this;
 
+        if (!fs.existsSync('public/excel')) {
+            fs.mkdirSync('public/excel');
+        }
+
         for (let i = 1; i < data.length; i++) {
 
-            infolog.info(`${i}/${data.length} 开始请求(${data[i][0]})smiles:(${data[i][2]})`);
+            infolog.info(`${i}/${data.length} 开始请求(${data[i][0]})`);
 
             await requestHtml.call(_this, data[i], this.fileIndex)
             if (i == data.length - 1) {
-                // await writeExcel.call(_this);
                 infolog.info('done!!!');
             }
             // return;
@@ -167,12 +93,12 @@ class NewHtmlToExcel {
 
     // 请求html
     async requestHtml(item, fileIndex) {
-        // var { id, smiles } = item;
-        var name = item[0],
-            smiles = item[2],
+        var name = item[2],
+            molecule = item[0],
+            smiles = item[3],
             id = item[1];
 
-        console.log(item);
+        // console.log(item);
         // return;
         if (!smiles) {
             errlog.error('smiles不存在', id, smiles);
@@ -190,8 +116,8 @@ class NewHtmlToExcel {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify({ smiles: smiles }),
         }).then(async (res) => {
-            infolog.info('-- 请求完成,id: ' + id);
-            await processData.call(_this, res.data, name, id, smiles, fileIndex)
+            // infolog.info('-- 请求完成,id: ' + id);
+            await processData.call(_this, res.data, name, id, smiles, fileIndex,molecule)
 
         }).catch((e) => {
             console.log(e)
@@ -200,17 +126,18 @@ class NewHtmlToExcel {
                 headers = e.response ? e.response.headers : '';
             errlog.error(`smilesName(${smiles})请求 status:${status},statusText:${statusText},headers:${headers}`);
             if (!errorSmilesToData) {
-                errorData.call(_this, fileIndex, name, id, smiles);
+                errorData.call(_this, fileIndex, name, id, smiles,molecule);
                 errorSmilesToData = true;
             }
         });
 
     }
 
-    async errorData(fileIndex, name, id, smiles) {
+    async errorData(fileIndex, name, id, smiles,molecule) {
         var arr1 = [
-            name,
+            molecule,
             id,
+            name,
             smiles,
             '',
             '',
@@ -296,13 +223,13 @@ class NewHtmlToExcel {
     }
 
     // 处理html
-    async processData(html, name, id, smiles, fileIndex) {
+    async processData(html, name, id, smiles, fileIndex,molecule) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
             return false;
         };
-        var arr1 = [name, id, smiles],
-            arr2 = ['', '', ''],
+        var arr1 = [molecule, id, name, smiles],
+            arr2 = ['', '', '',''],
             logP,
             hbAcceptor,
             hbDonor,
@@ -363,19 +290,16 @@ class NewHtmlToExcel {
         arr2.push('')
 
         writeExcel.call(_this, fileIndex, arr1, arr2)
-        infolog.info(`化合物${name} 数据处理完成!`);
+        // infolog.info(`化合物${name} 数据处理完成!`);
         // return true;
     }
 
     // 生成excel
     async writeExcel(fileIndex, arr1, arr2) {
 
-        var fileUrl = `public/excel/smiles_data_${fileIndex}.xlsx`,
+        var fileUrl = `public/excel/smile_ADME_lab_${fileIndex}_2021_01_25.xlsx`,
             excel;
 
-        if (!fs.existsSync('public/excel')) {
-            fs.mkdirSync('public/excel');
-        }
         if (!fs.existsSync(fileUrl)) {
 
             var buffer = xlsx.build(this.excel);
@@ -383,7 +307,7 @@ class NewHtmlToExcel {
             fs.writeFileSync(fileUrl, buffer);
         }
 
-        excel = xlsx.parse(`public/excel/smiles_data_${fileIndex}.xlsx`);
+        excel = xlsx.parse(fileUrl);
 
         excel[0].data.push(arr1, arr2)
 
