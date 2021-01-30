@@ -49,7 +49,7 @@ function admetsarFn() {
 }
 
 function admetsar2Fn() {
-    let inputFile = 'public/excel/admetsar2_2021.01.10.xlsx'
+    let inputFile = 'public/excel/admetsar2_smiles_data_20210110.xlsx'
     let a = new admetsar2(inputFile);
 }
 

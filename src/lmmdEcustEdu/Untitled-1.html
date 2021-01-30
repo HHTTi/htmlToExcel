@@ -1,0 +1,1556 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8" />
+    <title>admetSAR @ LMMD</title>
+    <link href="/admetsar1/media/style.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/media/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="icon" href="/media/favicon.ico" type="image/vnd.microsoft.icon" />
+    <script type="text/javascript" src="/admetsar1/media/jquery.js"></script>
+    <script type="text/javascript" src="/admetsar1/media/admetpdb.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+</head>
+
+<body>
+    <div id="upgrade" class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" onclick="$('#upgrade').hide()"><span
+                aria-hidden="true">&times;</span></button>
+        <strong>Notice!</strong> New version of admetSAR - 2.0 is available: <a
+            href="http://lmmd.ecust.edu.cn/admetsar2">http://lmmd.ecust.edu.cn/admetsar2</a>!
+    </div>
+    <div id="header">
+        <p>A comprehensive source and free tool for evaluating<br />chemical ADMET properties</p>
+    </div>
+    <div id="nav">
+        <table>
+            <tr>
+                <td>
+                    <div><a href="/admetsar1/home/"><img src="/admetsar1/media/nav_home.png" alt="" /></a></div>
+                </td>
+                <td>
+                    <div><a href="/admetsar1/search/"><img src="/admetsar1/media/nav_search.png" alt="" /></a></div>
+                </td>
+                <td>
+                    <div class="highlight"><a href="/admetsar1/predict/"><img src="/admetsar1/media/nav_predict.png"
+                                alt="" /></a></div>
+                </td>
+                <td>
+                    <div><a href="/admetsar1/about/"><img src="/admetsar1/media/nav_about.png" alt="" /></a></div>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="/admetsar1/home/">Home</a></td>
+                <td><a href="/admetsar1/search/">Search</a></td>
+                <td><a href="/admetsar1/predict/">Predict</a></td>
+                <td><a href="/admetsar1/about/">About</a></td>
+            </tr>
+        </table>
+    </div>
+    <div id="section">
+        <h2>Predict</h2>
+    </div>
+    <div id="container">
+        <script type="text/javascript">
+            //<![CDATA[
+            var timer;
+            $(function () {
+                $(window).scroll(function () {
+                    clearInterval(timer);
+                    var top = getScroll();
+                    var dist = $("#models").offset().top + 10;
+                    timer = setInterval(function () {
+                        if (top > dist) {
+                            $(".models").animate({
+                                "margin-top": top - dist
+                            }, 500);
+                        } else {
+                            $(".models").animate({
+                                "margin-top": 0
+                            }, 500);
+                        }
+                    }, 500)
+                })
+            });
+
+            function getScroll() {
+                var bodyTop = 0;
+                if (typeof window.pageYOffset != 'undefined') {
+                    bodyTop = window.pageYOffset;
+                } else if (typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') {
+                    bodyTop = document.documentElement.scrollTop;
+                } else if (typeof document.body != 'undefined') {
+                    bodyTop = document.body.scrollTop;
+                }
+                return bodyTop
+            }
+            //]]>
+        </script>
+
+        <table class="maintable">
+            <tr>
+                <td rowspan="2" class="content" style="width:30%">
+                    <h3 id="models">Models</h3>
+                    <div class="models" style="margin:0;padding:0;">
+
+                        <table class="compound_profile" id="A_BBB_I">
+                            <tr>
+                                <th colspan="4">Blood-Brain Barrier</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">A_BBB_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">The entire dataset were collected from Shen&#39;s work, which included
+                                    1839 compounds (1438 BBB+ and 401 BBB- compounds). </td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.9429</td>
+                                <th>SE</th>
+                                <td>0.9861</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.788</td>
+                                <th>AUC</th>
+                                <td>0.9517</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci100104j"
+                                        title="J. Chem. Inf. Model. 2010, 50, 1034-1041.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="A_Caco2_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Caco-2 Permeability</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">A_Caco2_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 674 compounds were collected from Hai Pham The et al,
+                                    including 303 Coca2+ and 371 Coca- compounds. If a compound with the Caco-2
+                                    permeability value (Papp) ≥ 8×10-6 cm/s, it is labeled as high Caco-2 permeability,
+                                    otherwise it is labeled as moderate-poor permeability.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.7463</td>
+                                <th>SE</th>
+                                <td>0.6964</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.7871</td>
+                                <th>AUC</th>
+                                <td>0.8216</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://onlinelibrary.wiley.com/doi/10.1002/minf.201000118/pdf"
+                                        title="Mol. Inf. 2011, 30, 376-385,">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="A_HIA_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Human Intestinal Absorption</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">A_HIA_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">The entire dataset were collected from Shen&#39;s work, which included
+                                    578 compounds (500 HIA+ and 78 HIA- compounds). If a compound with the HIA% is less
+                                    than 30%, it is labeled as HIA-, otherwise it is labeled as HIA+.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.9394</td>
+                                <th>SE</th>
+                                <td>0.98</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.6795</td>
+                                <th>AUC</th>
+                                <td>0.9458</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci100104j"
+                                        title="J. Chem. Inf. Model. 2010, 50, 1034-1041.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="A_PgpI_I" style="display:none">
+                            <tr>
+                                <th colspan="4">P-glycoprotein Inhibitor</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">A_PgpI_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 1273 compounds were collected from Chen et al. including 797
+                                    Pgp inhibitors and 476 Pgp non-inhibitors.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.7855</td>
+                                <th>SE</th>
+                                <td>0.872</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.6408</td>
+                                <th>AUC</th>
+                                <td>0.8529</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://pubs.acs.org/doi/pdfplus/10.1021/mp100465q"
+                                        title="Mol. Pharmaceutics. 2011, 8, 889-900">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="A_PgpI_II" style="display:none">
+                            <tr>
+                                <th colspan="4">P-glycoprotein Inhibitor</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">A_PgpI_II</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 1275 compounds were collected from Broccatelli et al.,
+                                    including 666 Pgp inhibitors and 609 Pgp non-inhibitors.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8659</td>
+                                <th>SE</th>
+                                <td>0.8709</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.8604</td>
+                                <th>AUC</th>
+                                <td>0.9217</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://pubs.acs.org/doi/pdfplus/10.1021/jm101421d"
+                                        title="J. Med. Chem. 2011, 54, 1740-1751">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="A_PgpS_I" style="display:none">
+                            <tr>
+                                <th colspan="4">P-glycoprotein Substrate</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">A_PgpS_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 332 compounds were collected from Wang et al. including 206
+                                    Pgp substrates and 126 Pgp non-substrates.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.7349</td>
+                                <th>SE</th>
+                                <td>0.8689</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.5159</td>
+                                <th>AUC</th>
+                                <td>0.7678</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://pubs.acs.org/doi/pdfplus/10.1021/ci2001583"
+                                        title="J. Chem. Inf. Model. 2011, 51, 1447-1456">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="D_SCL_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Subcellular localization</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">D_SCL_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 491 compounds, including 132 localized in lysosome, 190 in
+                                    mitochondira, 81 in nucleus, and 88 in plasma membrane, were collected from
+                                    literature and trained by support vector machine. The model will give the most
+                                    likely localization in cell and the propability of the query compound.</td>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="E_OCT2I_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Renal Organic Cation Transporter</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">E_OCT2I_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 906 molecules, including 244 inhibitors and 633 non-inhibitors
+                                    against the renal organic cation transporter (OCT2/SLC22A2) were collected from
+                                    Kido’s work for model building. </td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.7949</td>
+                                <th>SE</th>
+                                <td>0.4385</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.9261</td>
+                                <th>AUC</th>
+                                <td>0.8074</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://pubs.acs.org/doi/pdfplus/10.1021/jm2001629"
+                                        title="J. Med. Chem., 2011, 54, 4548–4558 ">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_BIO_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Biodegradation</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_BIO_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">1604 compounds including 591 ready biodegradable chemicals and 1013 not
+                                    ready biodegradable chemicals were collected from Cheng&#39;s work, Cheng et al.
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8323</td>
+                                <th>SE</th>
+                                <td>0.7513</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.8796</td>
+                                <th>AUC</th>
+                                <td>0.8898</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://pubs.acs.org/doi/pdfplus/10.1021/ci200622d"
+                                        title="J. Chem. Inf. Model., 2012, 52, 655–669 ">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP1A2I_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 1A2 Inhibitor</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP1A2I_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 14903 compounds, including 7415 inhibitors and 7488
+                                    noninhibitors were collected from Cheng et al. A compound was assigned as a CYP
+                                    inhibitor if the AC50 (the compound concentration leads to 50% of the activity of an
+                                    inhibition control) value was e10 μM, and it was considered as a noninhibitor if
+                                    AC50 was &gt;57 μM. In addition, a compound was regarded as a CYP inhibitor if it
+                                    has the PubChem activity score between 40 and 100, and as a noninhibitor if it has
+                                    PubChem activity score equal to 0.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8147</td>
+                                <th>SE</th>
+                                <td>0.7985</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.8307</td>
+                                <th>AUC</th>
+                                <td>0.8832</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci200028n"
+                                        title="J. Chem. Inf. Model. 2011, 51, 996-1011">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP2C19I_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 2C19 Inhibitor</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP2C19I_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 14576 compounds, including 6041 inhibitors and 8535
+                                    noninhibitors were collected from Cheng et al. A compound was assigned as a CYP
+                                    inhibitor if the AC50 (the compound concentration leads to 50% of the activity of an
+                                    inhibition control) value was e10 μM, and it was considered as a noninhibitor if
+                                    AC50 was &gt;57 μM. In addition, a compound was regarded as a CYP inhibitor if it
+                                    has the PubChem activity score between 40 and 100, and as a noninhibitor if it has
+                                    PubChem activity score equal to 0.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8054</td>
+                                <th>SE</th>
+                                <td>0.7479</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.846</td>
+                                <th>AUC</th>
+                                <td>0.8712</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci200028n"
+                                        title="J. Chem. Inf. Model. 2011, 51, 996-1011">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP2C9I_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 2C9 Inhibitor</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP2C9I_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 14709 compounds, including 4978 inhibitors and 9731
+                                    noninhibitors were collected from Cheng et al. A compound was assigned as a CYP
+                                    inhibitor if the AC50 (the compound concentration leads to 50% of the activity of an
+                                    inhibition control) value was e10 μM, and it was considered as a noninhibitor if
+                                    AC50 was &gt;57 μM. In addition, a compound was regarded as a CYP inhibitor if it
+                                    has the PubChem activity score between 40 and 100, and as a noninhibitor if it has
+                                    PubChem activity score equal to 0.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8018</td>
+                                <th>SE</th>
+                                <td>0.637</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.8861</td>
+                                <th>AUC</th>
+                                <td>0.8582</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci200028n"
+                                        title="J. Chem. Inf. Model. 2011, 51, 996-1011">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP2C9S_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 2C9 Substrate</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP2C9S_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 673 drugs including 142 substrates and 531 non-substrates were
+                                    collected from Carbon-Mangles&#39;s work.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.7875</td>
+                                <th>SE</th>
+                                <td>0.0423</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.9868</td>
+                                <th>AUC</th>
+                                <td>0.5748</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://onlinelibrary.wiley.com/doi/10.1002/minf.201100069/pdf"
+                                        title="Mol. Inf. 2011, 30, 885-895.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP2D6I_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 2D6 Inhibitor</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP2D6I_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 14741 compounds, including 3060 inhibitors and 11681
+                                    noninhibitors were collected from Cheng et al. A compound was assigned as a CYP
+                                    inhibitor if the AC50 (the compound concentration leads to 50% of the activity of an
+                                    inhibition control) value was e10 μM, and it was considered as a noninhibitor if
+                                    AC50 was &gt;57 μM. In addition, a compound was regarded as a CYP inhibitor if it
+                                    has the PubChem activity score between 40 and 100, and as a noninhibitor if it has
+                                    PubChem activity score equal to 0.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8551</td>
+                                <th>SE</th>
+                                <td>0.4556</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.9598</td>
+                                <th>AUC</th>
+                                <td>0.8396</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci200028n"
+                                        title="J. Chem. Inf. Model. 2011, 51, 996-1011.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP2D6S_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 2D6 Substrate</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP2D6S_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 671 drugs including 191 substrates and 480 non-substrates were
+                                    collected from Carbon-Mangles&#39;s work.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.7586</td>
+                                <th>SE</th>
+                                <td>0.377</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.9104</td>
+                                <th>AUC</th>
+                                <td>0.7456</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://onlinelibrary.wiley.com/doi/10.1002/minf.201100069/pdf"
+                                        title="Mol. Inf. 2011, 30, 885-895.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP3A4I_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 3A4 Inhibitor</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP3A4I_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 18561 compounds, including 6707 inhibitors and 11854
+                                    non-inhibitors were collected from Cheng&#39; work. A compound was assigned as a CYP
+                                    inhibitor if the AC50 (the compound concentration leads to 50% of the activity of an
+                                    inhibition control) value was 10 μM, and it was considered as a non-inhibitor if
+                                    AC50 was &gt;57 μM. In addition, a compound was regarded as a CYP inhibitor if it
+                                    has the PubChem activity score between 40 and 100, and as a non-inhibitor if it has
+                                    PubChem activity score equal to 0.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.645</td>
+                                <th>SE</th>
+                                <td>0.865</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.525</td>
+                                <th>AUC</th>
+                                <td>0.848</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci200028n"
+                                        title="J. Chem. Inf. Model. 2011, 51, 996-1011.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYP3A4S_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP450 3A4 Substrate</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYP3A4S_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 671 drugs including 357 substrates and 317 non-substrates were
+                                    collected from Carbon-Mangles&#39;s work.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.638</td>
+                                <th>SE</th>
+                                <td>0.7059</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.5615</td>
+                                <th>AUC</th>
+                                <td>0.6735</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://onlinelibrary.wiley.com/doi/10.1002/minf.201100069/pdf"
+                                        title="Mol. Inf. 2011, 30, 885-895.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="M_CYPPro_I" style="display:none">
+                            <tr>
+                                <th colspan="4">CYP Inhibitory Promiscuity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">M_CYPPro_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 5461 compounds, including 3269 high P450 inhibitory
+                                    promiscuous compounds (Iinh≥0.8) and 2192 low P450 inhibitory promiscuous compounds
+                                    (Iinh≤0.2) were collected from Cheng&#39;s work.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.821</td>
+                                <th>SE</th>
+                                <td>0.885</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.725</td>
+                                <th>AUC</th>
+                                <td>0.879</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci200317s"
+                                        title="J. Chem. Inf. Model., 2011, 51(10): 2482-2495.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_AMES_I" style="display:none">
+                            <tr>
+                                <th colspan="4">AMES Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_AMES_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">8445 Compounds including 4912 AMES toxic chemicals and 3533 non AMES
+                                    toxic chemicals were collected from 10 published papers.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8514</td>
+                                <th>SE</th>
+                                <td>0.8827</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.8078</td>
+                                <th>AUC</th>
+                                <td>0.9082</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/ci900161g"
+                                        title=" J Chem Inf Model, 2009, 49, 2077-2081.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_AO_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Acute Oral Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_AO_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">12,204 diverse compounds with LD50 were classified into four categories
+                                    based on the criterion of US EPA (Category I contains compounds with LD50 values
+                                    less than or equal to 50mg/kg. Category II contains compounds with LD50 values
+                                    greater than 50mg/kg but less than 500mg/kg. Category III includes compounds with
+                                    LD50 values greater than 500mg/kg but less than 5000mg/kg. Category IV consisted of
+                                    compounds with LD50 values greater than 5000mg/kg).</td>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_Carc3_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Carcinogenicity (Three-class)</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_Carc3_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">981 structurally diverse chemicals for rat carcinogenicity extracted
+                                    from Carcinogenic Potency Database (CPDB) were divided into three classes, labeled
+                                    &quot;Danger&quot;, &quot;Warning&quot; and &quot;Non-required&quot;, according to
+                                    the TD50 values. Carcinogenic compounds with TD50 &lt;= 10 mg/kg body wt/day were
+                                    assigned as &quot;Danger&quot;, those with TD50 &gt; 10 mg/kg body wt/day were
+                                    assigned as &quot;Warning&quot;, and non-carcinogenic chemicals were assigned as
+                                    &quot;Non-required&quot;.</td>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_Carc_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Carcinogens</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_Carc_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 293 chemicals, including 64 carcinogens and 229 noncarcinogens
+                                    were collected from Lagunin et al., </td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.884</td>
+                                <th>SE</th>
+                                <td>0.5625</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.9738</td>
+                                <th>AUC</th>
+                                <td>0.8356</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://onlinelibrary.wiley.com/doi/10.1002/qsar.200860192/pdf"
+                                        title="QSAR Comb. Sci. 2009, 28(8):806-810.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_FHMT_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Fish Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_FHMT_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 554 compounds, including 336 high fathead minnow toxicity
+                                    (FHMT) compounds and 188 low FHMT compounds were collected from EPA Fathead Minnow
+                                    Acute Toxicity Database EPAFHM. If a compound with the value of LC50 more than 0.5
+                                    mmol/L were assigned as high acute FHMT compound, whereas it was assigned as low
+                                    acute FHMT compounds.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8141</td>
+                                <th>SE</th>
+                                <td>0.8962</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.6543</td>
+                                <th>AUC</th>
+                                <td>0.88</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://www.epa.gov/ncct/dsstox/sdf_epafhm.html"
+                                        title="Chin J Pesti Sci. 2010, 12, 12:477-488">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_HBT_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Honey Bee Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_HBT_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 195 pesticides or pesticide-like molecules, including 99 high
+                                    honey bee toxicity compounds and 96 low HBT compounds were collected from US EPA
+                                    ECOTOX Database. If a compound with the value of LD50 more than 100 μg/bee were
+                                    assigned as high acute HBT compound, while it was assigned as low acute HBT
+                                    compound.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.759</td>
+                                <th>SE</th>
+                                <td>0.7576</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.7604</td>
+                                <th>AUC</th>
+                                <td>0.824</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://www.epa.gov/med/Prods_Pubs/ecotox.htm#terrestrial"
+                                        title="Chin J Pesti Sci. 2010, 12, 12:477-488">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_hERG_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Human Ether-a-go-go-Related Gene Inhibition</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_hERG_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">368 molecules including 79 strong hERG inhibitors (pIC50&gt; 6.0
+                                    mol/L)and 289 weak hERG inhibitors (pIC50≤6.0 mol/L) were collected from Marchese
+                                    Robinson et al.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.8696</td>
+                                <th>SE</th>
+                                <td>0.4937</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.9723</td>
+                                <th>AUC</th>
+                                <td>0.82</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://onlinelibrary.wiley.com/doi/10.1002/minf.201000159/pdf"
+                                        title="Mol. Inf. 2011, 30, 443-458.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_hERG_II" style="display:none">
+                            <tr>
+                                <th colspan="4">Human Ether-a-go-go-Related Gene Inhibition</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_hERG_II</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">806 molecules including 433 hERG inhibitors (IC50&gt; 50 μM) and 373
+                                    hERG noninhibitors (pIC50≤50 μM) were collected from Wang&#39;s work,.</td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.7841</td>
+                                <th>SE</th>
+                                <td>0.7829</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.7855</td>
+                                <th>AUC</th>
+                                <td>0.8492</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/abs/10.1021/mp300023x"
+                                        title=" Mol Pharm, 2012, 9, 996-1010.">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+                        <table class="compound_profile" id="T_TPT_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Tetrahymena Pyriformis Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">T_TPT_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 1571 compounds, including 1217 high Tetrahymena Pyriformis
+                                    Toxicity (TPT) compounds and 354 low TPT compounds, were collected from Cheng et al.
+                                    If a compound with the pIGC50 (the negative logarithm of 50% growth inhibitory
+                                    concentration) &gt; -0.5 was assigned as TPT, otherwise as non-TPT. </td>
+                            </tr>
+
+                            <tr>
+                                <th>Q</th>
+                                <td>0.9173</td>
+                                <th>SE</th>
+                                <td>0.9581</td>
+                            </tr>
+                            <tr>
+                                <th>SP</th>
+                                <td>0.7768</td>
+                                <th>AUC</th>
+                                <td>0.9562</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://www.sciencedirect.com/science/article/pii/S0045653510013500"
+                                        title="Chemosphere. 2011, 82(11):1636-1643">Reference</a></th>
+                            </tr>
+
+                        </table>
+
+
+                        <table class="compound_profile" id="R_A_Caco2_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Caco-2 Permeability</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">R_A_Caco2_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 674 drug or drug-like molecules with Caco-2 permeability
+                                    values were used.</td>
+                            </tr>
+                            <tr>
+                                <th>R2</th>
+                                <td>0.564</td>
+                                <th>RMSD</th>
+                                <td>0.339</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://onlinelibrary.wiley.com/doi/10.1002/minf.201000118/pdf"
+                                        title="Mol Inf, 2011, 30: 376-385.">Reference</a></th>
+                            </tr>
+                        </table>
+
+                        <table class="compound_profile" id="R_A_WS_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Aqueous solubility</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">R_A_WS_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 1708 molecules with LogS value were collected from Wang&#39;s
+                                    work.</td>
+                            </tr>
+                            <tr>
+                                <th>R2</th>
+                                <td>0.81</td>
+                                <th>RMSD</th>
+                                <td>0.823</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://pubs.acs.org/doi/full/10.1021/ci700096r"
+                                        title="J Chem Inf Model, 2007, 47: 1395-1404.">Reference</a></th>
+                            </tr>
+                        </table>
+
+                        <table class="compound_profile" id="R_T_FHMT_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Fish Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">R_T_FHMT_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 554 pesticides or pesticide-like molecules with pLC50 (mg/L)
+                                    value were collected from EPA Fathead Minnow Acute Toxicity Database EPAFHM.</td>
+                            </tr>
+                            <tr>
+                                <th>R2</th>
+                                <td>0.574</td>
+                                <th>RMSD</th>
+                                <td>0.666</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank" href="http://www.epa.gov/ncct/dsstox/sdf_epafhm.html"
+                                        title="Chinses Journal of Pesticide Science, 2010, 12: 477-488.">Reference</a>
+                                </th>
+                            </tr>
+                        </table>
+
+                        <table class="compound_profile" id="R_T_RAT_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Rat Acute Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">R_T_RAT_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 10207 molecules with LD50 (mg/L) against rat were collected
+                                    from Zhu&#39;s work.</td>
+                            </tr>
+                            <tr>
+                                <th>R2</th>
+                                <td>0.613</td>
+                                <th>RMSD</th>
+                                <td>0.324</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://pubs.acs.org/doi/pdfplus/10.1021/tx900189p"
+                                        title="Chem Res Toxicol, 2009, 22: 1913-1921.">Reference</a></th>
+                            </tr>
+                        </table>
+
+                        <table class="compound_profile" id="R_T_TPT_I" style="display:none">
+                            <tr>
+                                <th colspan="4">Tetrahymena Pyriformis Toxicity</th>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td colspan="3">R_T_TPT_I</td>
+                            </tr>
+                            <tr>
+                                <th>Desc.</th>
+                                <td colspan="3">In total, 1571 compounds with pIGC50 (ug/L) value against Tetrahymena
+                                    pyriformis were collected from Cheng&#39;s work.</td>
+                            </tr>
+                            <tr>
+                                <th>R2</th>
+                                <td>0.761</td>
+                                <th>RMSD</th>
+                                <td>0.256</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4"><a target="_blank"
+                                        href="http://www.sciencedirect.com/science/article/pii/S0045653510013500"
+                                        title="Chemosphere, 2011, 82: 1636-1643.">Reference</a></th>
+                            </tr>
+                        </table>
+
+                    </div>
+                </td>
+                <td class="content" style="width:70%">
+                    <div style="float:right;margin:1px;"><span
+                            style="line-height: 20px;vertical-align: top;">&raquo;</span>
+                        <a href="/jsdraw/" target="_blank"><img src="/media/jsdraw.gif" alt=""
+                                title="Draw your molecules to get SMILES" /></a>
+                    </div>
+                    <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Input SMILES Here</h3>
+                    <form action="" method="get">
+                        <fieldset>
+                            <table>
+                                <tr>
+                                    <th><label for="id_smiles">SMILES:</label></th>
+                                    <td><input name="smiles" value="OCC1OC(Oc2ccc(cc2)C=CC(=O)c2ccc(cc2O)O)C(C(C1O)O)O"
+                                            maxlength="1024" type="text" id="id_smiles" size="65" /></td>
+                                </tr>
+                            </table>
+                            <input name="action" type="hidden" value="A" />
+                            <input type="submit" value="Predict" class="submit" />
+                        </fieldset>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td class="content" style="padding-bottom:50px;">
+
+                    <h3>Results</h3>
+                    <h4>ADMET Predicted Profile --- Classification</h4>
+                    <table class="compound_profile">
+                        <tr>
+                            <td class="level1" style="width:40%">Model</td>
+                            <td class="level1" style="width:40%">Result</td>
+                            <td class="level1" style="width:20%">Probability</td>
+                        </tr>
+                        <tr>
+                            <td class="level1" colspan="3">Absorption</td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="1">Blood-Brain Barrier</td>
+                            <td><a href="" class="m" title="A_BBB_I">BBB+</a></td>
+                            <td>0.5977</td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="1">Human Intestinal Absorption</td>
+                            <td><a href="" class="m" title="A_HIA_I">HIA+</a></td>
+                            <td>0.5131</td>
+                        </tr>
+
+
+                        <tr>
+                            <td rowspan="1">Caco-2 Permeability</td>
+                            <td><a href="" class="m" title="A_Caco2_I">Caco2-</a></td>
+                            <td>0.8659</td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="1">P-glycoprotein Substrate</td>
+                            <td><a href="" class="m" title="A_PgpS_I">Substrate</a></td>
+                            <td>0.5819</td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="2">P-glycoprotein Inhibitor</td>
+                            <td><a href="" class="m" title="A_PgpI_I">Non-inhibitor</a></td>
+                            <td>0.7791</td>
+                        </tr>
+
+
+                        <tr>
+                            <td><a href="" class="m" title="A_PgpI_II">Non-inhibitor</a></td>
+                            <td>0.8191</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">Renal Organic Cation Transporter</td>
+                            <td><a href="" class="m" title="E_OCT2I_I">Non-inhibitor</a></td>
+                            <td>0.8533</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td class="level1" colspan="3">Distribution</td>
+                        </tr>
+
+
+                        <!-- Updated at 2017-03-2 16:28 by Hongbin Yang -->
+
+                        <tr>
+                            <td rowspan="1">Subcellular localization</td>
+                            <td><a href="" class="m" title="D_SCL_I">Mitochondria</a></td>
+                            <td>0.6013</td>
+                        </tr>
+
+
+                        <!-- *** END *** -->
+                        <tr>
+                            <td class="level1" colspan="3">Metabolism</td>
+                        </tr>
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 2C9 Substrate</td>
+                            <td><a href="" class="m" title="M_CYP2C9S_I">Non-substrate</a></td>
+                            <td>0.7601</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 2D6 Substrate</td>
+                            <td><a href="" class="m" title="M_CYP2D6S_I">Non-substrate</a></td>
+                            <td>0.8911</td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 3A4 Substrate</td>
+                            <td><a href="" class="m" title="M_CYP3A4S_I">Non-substrate</a></td>
+                            <td>0.6153</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 1A2 Inhibitor</td>
+                            <td><a href="" class="m" title="M_CYP1A2I_I">Non-inhibitor</a></td>
+                            <td>0.9266</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 2C9 Inhibitor</td>
+                            <td><a href="" class="m" title="M_CYP2C9I_I">Non-inhibitor</a></td>
+                            <td>0.8632</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 2D6 Inhibitor</td>
+                            <td><a href="" class="m" title="M_CYP2D6I_I">Non-inhibitor</a></td>
+                            <td>0.9150</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 2C19 Inhibitor</td>
+                            <td><a href="" class="m" title="M_CYP2C19I_I">Non-inhibitor</a></td>
+                            <td>0.8903</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP450 3A4 Inhibitor</td>
+                            <td><a href="" class="m" title="M_CYP3A4I_I">Non-inhibitor</a></td>
+                            <td>0.8309</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">CYP Inhibitory Promiscuity</td>
+                            <td><a href="" class="m" title="M_CYPPro_I">Low CYP Inhibitory Promiscuity</a></td>
+                            <td>0.6278</td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <td class="level1" colspan="3">Excretion</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td class="level1" colspan="3">Toxicity</td>
+                        </tr>
+
+
+                        <tr>
+                            <td rowspan="2">Human Ether-a-go-go-Related Gene Inhibition</td>
+                            <td><a href="" class="m" title="T_hERG_I">Weak inhibitor</a></td>
+                            <td>0.9610</td>
+                        </tr>
+
+
+                        <tr>
+                            <td><a href="" class="m" title="T_hERG_II">Non-inhibitor</a></td>
+                            <td>0.7933</td>
+                        </tr>
+
+
+
+
+
+                        <tr>
+                            <td rowspan="1">AMES Toxicity</td>
+                            <td><a href="" class="m" title="T_AMES_I">Non AMES toxic</a></td>
+                            <td>0.5173</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">Carcinogens</td>
+                            <td><a href="" class="m" title="T_Carc_I">Non-carcinogens</a></td>
+                            <td>0.9623</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">Fish Toxicity</td>
+                            <td><a href="" class="m" title="T_FHMT_I">High FHMT</a></td>
+                            <td>0.8768</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">Tetrahymena Pyriformis Toxicity</td>
+                            <td><a href="" class="m" title="T_TPT_I">High TPT</a></td>
+                            <td>0.9847</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">Honey Bee Toxicity</td>
+                            <td><a href="" class="m" title="T_HBT_I">High HBT</a></td>
+                            <td>0.6476</td>
+                        </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <tr>
+                            <td rowspan="1">Biodegradation</td>
+                            <td><a href="" class="m" title="M_BIO_I">Ready biodegradable</a></td>
+                            <td>0.8305</td>
+                        </tr>
+
+
+
+                        <!-- Updated at 2014-01-23 13:25 for Xiao Lee -->
+
+                        <tr>
+                            <td rowspan="1">Acute Oral Toxicity</td>
+                            <td><a href="" class="m" title="T_AO_I">III</a></td>
+                            <td>0.6845</td>
+                        </tr>
+
+
+                        <!-- *** END *** -->
+                        <!-- Updated at 2014-01-25 10:22 for Xiao Lee -->
+
+                        <tr>
+                            <td rowspan="1">Carcinogenicity (Three-class)</td>
+                            <td><a href="" class="m" title="T_Carc3_I">Non-required</a></td>
+                            <td>0.7420</td>
+                        </tr>
+
+
+                        <!-- *** END *** -->
+
+                    </table>
+                    <h4>ADMET Predicted Profile --- Regression</h4>
+                    <table class="compound_profile">
+                        <tr>
+                            <td class="level1" style="width:40%">Model</td>
+                            <td class="level1" style="width:20%">Value</td>
+                            <td class="level1" style="width:40%">Unit</td>
+                        </tr>
+                        <tr>
+                            <td class="level1" colspan="3">Absorption</td>
+                        </tr>
+
+
+                        <tr>
+                            <td rowspan="1">Aqueous solubility</td>
+                            <td><a href="" class="m" title="R_A_WS_I">-1.5280</a></td>
+                            <td>LogS</td>
+                        </tr>
+
+
+
+
+
+                        <tr>
+                            <td rowspan="1">Caco-2 Permeability</td>
+                            <td><a href="" class="m" title="R_A_Caco2_I">-0.5194</a></td>
+                            <td>LogPapp, cm/s</td>
+                        </tr>
+
+
+
+
+
+
+                        <tr>
+                            <td class="level1" colspan="3">Distribution</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td class="level1" colspan="3">Metabolism</td>
+                        </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+                        <tr>
+                            <td class="level1" colspan="3">Excretion</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td class="level1" colspan="3">Toxicity</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">Rat Acute Toxicity</td>
+                            <td><a href="" class="m" title="R_T_RAT_I">2.3517</a></td>
+                            <td>LD50, mol/kg</td>
+                        </tr>
+
+
+                        <tr>
+                            <td rowspan="1">Fish Toxicity</td>
+                            <td><a href="" class="m" title="R_T_FHMT_I">0.7027</a></td>
+                            <td>pLC50, mg/L</td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td rowspan="1">Tetrahymena Pyriformis Toxicity</td>
+                            <td><a href="" class="m" title="R_T_TPT_I">0.5183</a></td>
+                            <td>pIGC50, ug/L</td>
+                        </tr>
+
+
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="footer">
+        <table>
+            <tr>
+                <td>You are visitor No: 124644</td>
+                <td>Copyright @ 2012 East China University of Science and Technology, School of Pharmacy<br />Shanghai
+                    Key Laboratory of New Drug Design,
+                    <a href="http://www.lmmd.org/">Laboratory of Molecular Modeling and Design</a></td>
+                <td><a href="http://www.djangoproject.com/"><img src="/admetsar1/media/djangosite100x25.gif"
+                            alt="A Django site." title="A Django site." /></a></td>
+            </tr>
+        </table>
+    </div>
+    <div style="display: none;">
+        <div id="clustrmaps-widget"></div>
+        <script type="text/javascript">
+            var _clustrmaps = {
+                'url': 'http://www.admetexp.org/',
+                'user': 1006466,
+                'server': '3',
+                'id': 'clustrmaps-widget',
+                'version': 1,
+                'date': '2012-04-18',
+                'lang': 'zh',
+                'corners': 'square'
+            };
+            (function () {
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = 'http://www3.clustrmaps.com/counter/map.js';
+                var x = document.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(s, x);
+            })();
+        </script>
+        <noscript>
+            <p>
+                <a href="http://www3.clustrmaps.com/user/1faf5b82"><img
+                        src="http://www3.clustrmaps.com/stats/maps-no_clusters/www.admetexp.org--thumb.jpg"
+                        alt="Locations of visitors to this page" /></a>
+            </p>
+        </noscript>
+    </div>
+</body>
+
+</html>
