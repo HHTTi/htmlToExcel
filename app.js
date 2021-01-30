@@ -38,6 +38,9 @@ if (args[0]) {
         case 'admetsar2Fn':
             admetsar2Fn()
             break;
+        case 'newHtmlToExcelFn':
+            newHtmlToExcel()
+            break;
 
     }
 }
@@ -58,13 +61,23 @@ function admetsar2Fn() {
 // console.log( arr.getInitData())
 function newHtmlToExcel() {
     // inputFile, outputUrl, url, list, index, length
-    let inputFile = 'public/input/2.xlsx',
-        outputUrl = "public/output/smile_out_2.xlsx",
+    let inputFile = 'public/input/ADME_lab.xlsx',
         url = 'http://admet.scbdd.com/calcpre/index_sys_result/',
-        fileIndex = 817;
+        fileIndex = 0;
 
-    let excel = new NewHtmlToExcel(inputFile, outputUrl, url, fileIndex);
+    let excel = new NewHtmlToExcel(inputFile, url, fileIndex);
     excel.init()
+
+    let e2 = new NewHtmlToExcel(inputFile, url, 1);
+    e2.init()
+    let e3 = new NewHtmlToExcel(inputFile, url, 2);
+    e3.init()
+    let e4 = new NewHtmlToExcel(inputFile, url, 3);
+    e4.init()
+    let e5 = new NewHtmlToExcel(inputFile, url, 4);
+    e5.init()
+    let e6 = new NewHtmlToExcel(inputFile, url, 5);
+    e6.init()
 }
 
 
@@ -93,11 +106,11 @@ function updateExcel818() {
 // let excel = new NewGetHtml()
 
 // excel.init()
-function newGetHtmlFn(){
-    let inputFile =  "public/excel/6621.xlsx", 
+function newGetHtmlFn() {
+    let inputFile = "public/excel/6621.xlsx",
         outputUrl = "public/output/";
 
-    let excel = new NewGetHtml(inputFile,outputUrl)
+    let excel = new NewGetHtml(inputFile, outputUrl)
 
     excel.init()
 }
