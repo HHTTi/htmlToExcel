@@ -18,7 +18,6 @@ class NewHtmlToExcel {
             name: 'sheet1',
             data: [
                 [
-                    'Molecule',
                     'CID',
                     'Compound',
                     'Canonical SMILES',
@@ -93,10 +92,9 @@ class NewHtmlToExcel {
 
     // 请求html
     async requestHtml(item, fileIndex) {
-        var name = item[2],
-            molecule = item[0],
-            smiles = item[3],
-            id = item[1];
+        var name = item[1],
+            smiles = item[2],
+            id = item[0];
 
         // console.log(item);
         // return;
@@ -117,7 +115,7 @@ class NewHtmlToExcel {
             data: qs.stringify({ smiles: smiles }),
         }).then(async (res) => {
             // infolog.info('-- 请求完成,id: ' + id);
-            await processData.call(_this, res.data, name, id, smiles, fileIndex,molecule)
+            await processData.call(_this, res.data, name, id, smiles, fileIndex)
 
         }).catch((e) => {
             console.log(e)
@@ -126,16 +124,15 @@ class NewHtmlToExcel {
                 headers = e.response ? e.response.headers : '';
             errlog.error(`smilesName(${smiles})请求 status:${status},statusText:${statusText},headers:${headers}`);
             if (!errorSmilesToData) {
-                errorData.call(_this, fileIndex, name, id, smiles,molecule);
+                errorData.call(_this, fileIndex, name, id, smiles);
                 errorSmilesToData = true;
             }
         });
 
     }
 
-    async errorData(fileIndex, name, id, smiles,molecule) {
+    async errorData(fileIndex, name, id, smiles) {
         var arr1 = [
-            molecule,
             id,
             name,
             smiles,
@@ -223,13 +220,13 @@ class NewHtmlToExcel {
     }
 
     // 处理html
-    async processData(html, name, id, smiles, fileIndex,molecule) {
+    async processData(html, name, id, smiles, fileIndex) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
             return false;
         };
-        var arr1 = [molecule, id, name, smiles],
-            arr2 = ['', '', '',''],
+        var arr1 = [ id, name, smiles],
+            arr2 = ['', '',''],
             logP,
             hbAcceptor,
             hbDonor,
@@ -297,7 +294,7 @@ class NewHtmlToExcel {
     // 生成excel
     async writeExcel(fileIndex, arr1, arr2) {
 
-        var fileUrl = `public/excel/smile_ADME_lab_${fileIndex}_2021_01_25.xlsx`,
+        var fileUrl = `public/excel/smile_ADME_${fileIndex}_2021_01_30.xlsx`,
             excel;
 
         if (!fs.existsSync(fileUrl)) {

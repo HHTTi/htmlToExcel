@@ -39,7 +39,7 @@ if (args[0]) {
             admetsar2Fn()
             break;
         case 'newHtmlToExcelFn':
-            newHtmlToExcel()
+            newHtmlToExcelFn()
             break;
 
     }
@@ -59,25 +59,25 @@ function admetsar2Fn() {
 // let obj = arr.getInitData()
 
 // console.log( arr.getInitData())
-function newHtmlToExcel() {
+function newHtmlToExcelFn() {
     // inputFile, outputUrl, url, list, index, length
-    let inputFile = 'public/input/ADME_lab.xlsx',
+    let inputFile = 'public/input/工作簿1.xlsx',
         url = 'http://admet.scbdd.com/calcpre/index_sys_result/',
         fileIndex = 0;
 
-    let excel = new NewHtmlToExcel(inputFile, url, fileIndex);
-    excel.init()
+    // let excel = new NewHtmlToExcel(inputFile, url, fileIndex);
+    // excel.init()
 
-    let e2 = new NewHtmlToExcel(inputFile, url, 1);
-    e2.init()
+    // let e2 = new NewHtmlToExcel(inputFile, url, 1);
+    // e2.init()
     let e3 = new NewHtmlToExcel(inputFile, url, 2);
     e3.init()
-    let e4 = new NewHtmlToExcel(inputFile, url, 3);
-    e4.init()
-    let e5 = new NewHtmlToExcel(inputFile, url, 4);
-    e5.init()
-    let e6 = new NewHtmlToExcel(inputFile, url, 5);
-    e6.init()
+    // let e4 = new NewHtmlToExcel(inputFile, url, 3);
+    // e4.init()
+    // let e5 = new NewHtmlToExcel(inputFile, url, 4);
+    // e5.init()
+    // let e6 = new NewHtmlToExcel(inputFile, url, 5);
+    // e6.init()
 }
 
 
