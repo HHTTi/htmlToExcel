@@ -17,6 +17,7 @@ class admetsar1 {
             name: 'sheet1',
             data: [
                 [
+                    'Molecule',
                     'CID',
                     'Compound',
                     'CanonicalSMILES',
@@ -52,7 +53,7 @@ class admetsar1 {
 
         for (let i = 1; i < data.length; i++) {
 
-            infolog.info(`第${i}/${data.length}个请求(${data[i][0]})smiles:(${data[i][1]})`);
+            infolog.info(`第${i}/${data.length}个请求(${data[i][0]})cid:(${data[i][1]})`);
 
             await requestHtml.call(_this, data[i])
             if (i === data.length - 1) {
@@ -64,9 +65,10 @@ class admetsar1 {
 
     // 请求html
     async requestHtml(item) {
-        var name = item[1],
-            smiles = item[2].trim(),
-            id = item[0];
+        var name = item[2],
+            molecule = item[0], 
+            smiles = item[3].trim(),
+            id = item[1];
 
         if (!smiles) {
             errlog.error('smiles不存在', id, smiles);
@@ -85,7 +87,7 @@ class admetsar1 {
             // data: qs.stringify({ smiles: smiles }),
         }).then(async (res) => {
             infolog.info('-- 请求完成,id: ' + id);
-            await processData.call(_this, res.data, name, id, smiles)
+            await processData.call(_this, res.data, name, id, smiles,molecule)
 
         }).catch((e) => {
             let status = e.response ? e.response.status : '',
@@ -93,15 +95,16 @@ class admetsar1 {
                 headers = e.response ? e.response.headers : '';
             errlog.error(`smilesName(${smiles})请求 status:${status},statusText:${statusText},headers:${headers}`);
             if (!errorSmilesToData) {
-                errorData.call(_this, name, id, smiles);
+                errorData.call(_this, name, id, smiles,molecule);
                 errorSmilesToData = true;
             }
         });
 
     }
 
-    async errorData(name, id, smiles) {
+    async errorData(name, id, smiles,molecule) {
         var arr1 = [
+            molecule,
             name,
             id,
             smiles,
@@ -111,12 +114,12 @@ class admetsar1 {
     }
 
     // 处理html
-    async processData(html, name, id, smiles) {
+    async processData(html, name, id, smiles,molecule) {
         if (!html) {
             errlog.error('Fn-processData-html不存在');
             return false;
         };
-        var arr1 = [name, id, smiles],
+        var arr1 = [molecule, name, id, smiles],
             _this = this,
             container,
             hasData = false,
@@ -153,7 +156,7 @@ class admetsar1 {
     // 生成excel
     async writeExcel(arr1) {
 
-        var fileUrl = `public/excel/admetsar1_smiles_data_.xlsx`,
+        var fileUrl = `public/excel/admetsar1_smiles_data_2021_02_07.xlsx`,
             excel;
 
         if (!fs.existsSync('public/excel')) {
@@ -166,7 +169,7 @@ class admetsar1 {
             fs.writeFileSync(fileUrl, buffer);
         }
 
-        excel = xlsx.parse(`public/excel/admetsar1_smiles_data_.xlsx`);
+        excel = xlsx.parse(`public/excel/admetsar1_smiles_data_2021_02_07.xlsx`);
 
         excel[0].data.push(arr1)
 

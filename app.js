@@ -16,6 +16,7 @@ const MergeExcel = require('./src/mergeExcel')
 const UpdateExcel = require('./src/updateExcel')
 
 const NewHtmlToExcel = require('./src/NewHtmlToExcel')
+const NewMergeExcel = require('./src/NewMergeExcel')
 const NewSplitExcel = require('./src/NewSplitExcel')
 const NewGetHtml = require('./src/rule1/getHtml')
 const admetsar1 = require('./src/lmmdEcustEdu/admetsar1');
@@ -41,12 +42,24 @@ if (args[0]) {
         case 'newHtmlToExcelFn':
             newHtmlToExcel()
             break;
+        case 'newMergeExcelFn':
+            newMergeExcelFn()
+            break;
 
     }
 }
 
+function newMergeExcelFn() {
+    let input = 'public/excel/smile_ADME_lab',
+        output = 'public/output/smile_ADME_lab/smile_ADME_lab_2021_01_25.xlsx',
+        getFileName = (i) => `smile_ADME_lab_${i}_2021_01_25.xlsx`,
+        length = 5;
+
+    new NewMergeExcel(input,output,getFileName,length);
+}
+
 function admetsarFn() {
-    let inputFile = 'public/input/Bis2R3S4S5R6S62S3R4R.xlsx'
+    let inputFile = 'public/input/4256个化合物.xlsx'
     let a = new admetsar1(inputFile);
     a.init()
 }
