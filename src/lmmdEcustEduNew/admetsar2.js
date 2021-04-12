@@ -9,6 +9,8 @@ const xlsx = require('node-xlsx');
 class admetsar2 {
     constructor(inputFile) {
         this.inputFile = inputFile //输入 
+        this.fileUrl = `public/output/mp9_smiles_data_20210412.xlsx`;
+
         /**
          * 1.请求 http://lmmd.ecust.edu.cn/admetsar2 获得 任务编号
          * 2.请求 http://lmmd.ecust.edu.cn/admetsar2/result/?tid=274398&type=check 获得数据状态 （服务器是否完成） 返回true才执行第三步
@@ -50,10 +52,10 @@ class admetsar2 {
             var stepOne = this.stepOne,
                 timeFn = this.timeFn,
                 stepTwo = this.stepTwo,
+                stepThree = this.stepThree,
                 url = this.url,
                 _this = this;
 
-            var fileUrl = `public/output/admetsar2_smiles_data_20210112.xlsx`;
 
             if (!fs.existsSync('public/output')) {
                 fs.mkdirSync('public/output');
@@ -61,9 +63,9 @@ class admetsar2 {
 
             for (let i = this.curIndex; i < data.length; i++) {
                 this.curIndex = i;
-                var name = data[i][1],
-                    smiles = data[i][2].trim(),
-                    id = data[i][0];
+                var name = data[i][2],
+                    smiles = data[i][0].trim(),
+                    id = data[i][1];
     
                 if (!smiles) {
                     errlog.error('smiles不存在', id);
@@ -73,7 +75,7 @@ class admetsar2 {
                     this.excel[0].data.push(data[i])
                     continue;
                 }
-                infolog.info(`第${i}/${data.length}个请求 Compound:{{${name}}}`);
+                infolog.info(`第${i}/${data.length}个请求 Compound:{{${id}}}`);
     
                 let one = await stepOne(url, smiles)
 
@@ -83,41 +85,48 @@ class admetsar2 {
                     errlog.error('smiles', id,one.data.error);
                 } else if(one.data.result) {
                     let tid = one.data.result;
-                    for(let j = 0;j<100;j++) {
-                        let two =  await stepTwo(url,tid)
-                        if(two.data) {
-                            await timeFn()
-                            let three = await axios({url: url+ '?tid='+ tid +'&type=compound',method: 'GET'})
-                            if(three.data) {
-                                const {predictions,profiles,regressions} = three.data;
-                                let d = [ id, name,smiles]
-                                Array.isArray(profiles.compound1) && profiles.compound1.forEach((e,i) => {i!=5 && d.push(e.value)});
-                                Array.isArray(predictions.compound1) && predictions.compound1.forEach(e => {d.push(e.value)});
-                                Array.isArray(regressions.compound1) && regressions.compound1.forEach(e => {d.push(e.value)});
-                                this.excel[0].data.push(d)
-
-                                fs.writeFile(fileUrl, xlsx.build(this.excel), function (err) {
-                                    if (err) {
-                                        errlog.error("Write " + name + " failed: " + err);
-                                    }else {
-                                        infolog.info(`化合物${name} 数据处理完成!`);
-                                    }
-                                });
-                            }else {
-                                this.excel[0].data.push(data[i])
-                                this.excel[1].data.push(data[i])
-                            }
-                            break;
+                    let res = '', j = 0;
+                    do {
+                        await timeFn()
+                        j++;
+                        res = await stepTwo(url,tid)
+                        // console.log('res:',res.data);
+                        if(res.data === true) {
+                            await stepThree.call(_this,url,tid,id, name,smiles);
                         }else if(j == 99) {
                             this.excel[0].data.push(data[i])
                             this.excel[1].data.push(data[i])
                         }
-                    }
+
+                    } while (res.data !== true);
                 } 
             }
         } catch (e) {
             this.init(this.curIndex);
             errlog.error(e);
+        }
+    }
+
+    async stepThree(url,tid, id, name,smiles){
+        let three = await axios({url: url+ '?tid='+ tid +'&type=compound',method: 'GET'})
+        if(three.data) {
+            const {predictions,profiles,regressions} = three.data;
+            let d = [ id, name,smiles ]
+            Array.isArray(profiles.compound1) && profiles.compound1.forEach((e,i) => {i!=5 && d.push(e.probability)});
+            Array.isArray(predictions.compound1) && predictions.compound1.forEach(e => {d.push(e.probability)});
+            Array.isArray(regressions.compound1) && regressions.compound1.forEach(e => {d.push(e.probability)});
+            this.excel[0].data.push(d)
+
+            fs.writeFile(this.fileUrl, xlsx.build(this.excel), function (err) {
+                if (err) {
+                    errlog.error("Write " + id + " failed: " + err);
+                }else {
+                    infolog.info(`化合物${id} 数据处理完成!`);
+                }
+            });
+        }else {
+            this.excel[0].data.push(data[i])
+            this.excel[1].data.push(data[i])
         }
     }
 
